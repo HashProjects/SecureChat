@@ -1,3 +1,8 @@
+# Mac Finder File
+.DS_Store
+
+build/
+
 # Logs
 logs
 *.log
