@@ -25,14 +25,14 @@ npm run dev
 ### POST `/register`
 
 **request**
-```json
+```
 {
   username: string
   password: string
 }
 ```
 **response**
-```json
+```
 {
   authToken: string
 }
@@ -42,14 +42,14 @@ npm run dev
 ### POST `/login`
 
 **request**
-```json
+```
 {
   username: string
   password: string
 }
 ```
 **response**
-```json
+```
 {
   authToken: string
 }
@@ -65,7 +65,7 @@ npm run dev
 ---
 
 ### `message`
-```json
+```
 {
   conversation: string,
   isImage: bool,
