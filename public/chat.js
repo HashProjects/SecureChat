@@ -11,7 +11,9 @@ let onlineUserList = document.getElementById("userList");
 /**
  * The Socket.io instance
  */
-let socket = io();
+let socket = io({
+  auth: getCookie(auth)
+});
 
 /**
  * Initial connection
@@ -80,3 +82,20 @@ const deleteUserElement = (user) => {
   let userElement = document.getElementById(user.id);
   onlineUserList.removeChild(userElement);
 };
+
+//https://www.w3schools.com/js/js_cookies.asp
+const getCookie = (cname) => {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
