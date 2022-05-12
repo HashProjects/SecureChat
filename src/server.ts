@@ -17,6 +17,16 @@ export const server = http.createServer(app);
 export const io = new Server(server);
 
 /**
+ * Puts url encoded data into the request body
+ */
+app.use(express.urlencoded({extended: false}));
+
+/**
+ * Converts the request body to json
+ */
+app.use(express.json());
+
+/**
  * Logs all requests and responses
  */
 app.use(logger);
