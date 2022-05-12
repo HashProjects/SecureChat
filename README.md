@@ -34,8 +34,15 @@ Only use the default keys for development.
 
 If you are moving to production:
 
-Use `ssh-keygen -t RSA` to generate a new RSA key pair.
+Use `ssh-keygen` to generate a private key:
+`ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key`
+(Do not enter a passphrase!)
+
+And a public key:
+`openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub`
+
 Update the `.env` to use the new file names.
+In this example the private key was jwt.RS256.key and the public key was jwt.RS256.key.pub
 
 ---
 
