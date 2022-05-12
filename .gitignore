@@ -7,6 +7,10 @@ build/
 # sqlite database files
 *.db
 
+# RSA Key files
+*.key
+*.pub
+
 # Logs
 logs
 *.log
