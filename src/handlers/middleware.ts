@@ -20,6 +20,6 @@ export const logger = (req: Request, res: Response, next: NextFunction) => {
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({
-    error: "Not Found",
+    message: "Error: 404 Not Found",
   });
 }
