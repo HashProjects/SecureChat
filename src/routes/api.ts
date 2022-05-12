@@ -3,10 +3,12 @@ import { Request, Response, NextFunction } from "express";
 import { Router } from "express";
 import logging from "../config/logging";
 
+const NAMESPACE = "API Router";
+
 const router = Router();
 
 router.use((req: Request, res: Response, next: NextFunction) => {
-  logging.debug("API Router", "Routed to api");
+  logging.debug(NAMESPACE, "Routed to api");
   next();
 });
 router.post("/login", login);
