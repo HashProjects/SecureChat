@@ -19,8 +19,6 @@ export const logger = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
-  logging.debug(NAMESPACE, res.statusCode.toString());
-
   res.status(404).json({
     error: "Not Found",
   });
