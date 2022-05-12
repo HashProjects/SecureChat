@@ -4,9 +4,11 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc && node build/index.js",
-    "prod": "node build/index.js",
+    "build": "tsc && sass public/css:public/build",
+    "dev": "tsc && sass --watch public/css:public/build & node build/server.js",
+    "prod": "node build/server.js",
+    "reset": "sqlite3 ./db/main.db < ./db/init.sql",
+    "start": "npm run build && npm run prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
