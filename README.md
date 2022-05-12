@@ -3,7 +3,7 @@
 - [Installation](#installation)
 - [Development](#development)
 - [Contribution](#contribution)
-- [Crypography](#cryptography)
+- [Cryptography](#cryptography)
 - [Documentation](#documentation)
 
 # Installation
@@ -47,14 +47,15 @@ npm start
 To contribute to this repository, create a fork.
 Push your changes to your fork, then on the forked repo, click "contribute" to create a pull request with your changes on the main repo.
 
-Please use detailed commits and exclude unnessary files and changes unrelated to your pull. 
+Please use detailed commits and exclude unnessary files and changes unrelated to your pull.
 
 Do not `git add .` please add a commit message for each group of changes, and leave a description of your change in the pull request.
 
 # Cryptography
 
 ## Registration and Login
-`bcrypt` is used for user password hashing and salting. 
+
+`bcrypt` is used for user password hashing and salting.
 
 No plaintext passwords are stored.
 
@@ -69,9 +70,6 @@ JWTs contain a digital signature that guarantees integrity.
 ## Message Sending
 
 ## Key Passing
-
-
-
 
 # Documentation
 
