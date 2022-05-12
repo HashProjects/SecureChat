@@ -37,6 +37,8 @@ If you are moving to production:
 Use `ssh-keygen -t RSA` to generate a new RSA key pair.
 Update the `.env` to use the new file names.
 
+---
+
 # Development
 
 Install dev dependencies
@@ -51,6 +53,8 @@ Start the dev web server
 npm start
 ```
 
+---
+
 # Contribution
 
 To contribute to this repository, create a fork.
@@ -59,6 +63,8 @@ Push your changes to your fork, then on the forked repo, click "contribute" to c
 Please use detailed commits and exclude unnessary files and changes unrelated to your pull.
 
 Do not `git add .` please add a commit message for each group of changes, and leave a description of your change in the pull request.
+
+---
 
 # Cryptography
 
@@ -75,7 +81,6 @@ When the user attempts to login, their password is hashed and compared against t
 `JSON Web Tokens` are used as authentication tokens.
 
 JWTs contain a digital signature that guarantees integrity.
-
 
 ## Message Sending
 
