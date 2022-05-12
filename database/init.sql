@@ -1,8 +1,12 @@
 BEGIN TRANSACTION;
 
 DROP TABLE IF EXISTS Users;
+
 CREATE TABLE Users (
-    name VARCHAR PRIMARY KEY
+    id CHAR(36),
+    username VARCHAR UNIQUE,
+    password VARCHAR,
+    PRIMARY KEY (id)
 );
 
 COMMIT;
