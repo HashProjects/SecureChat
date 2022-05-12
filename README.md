@@ -28,6 +28,15 @@ Start the web server
 npm run prod
 ```
 
+## Key Generation
+
+Only use the default keys for development.
+
+If you are moving to production:
+
+Use `ssh-keygen -t RSA` to generate a new RSA key pair.
+Update the `.env` to use the new file names.
+
 # Development
 
 Install dev dependencies
@@ -66,6 +75,7 @@ When the user attempts to login, their password is hashed and compared against t
 `JSON Web Tokens` are used as authentication tokens.
 
 JWTs contain a digital signature that guarantees integrity.
+
 
 ## Message Sending
 
