@@ -4,12 +4,10 @@ import User from "../models/User";
 
 const NAMESPACE = "sockets";
 
-let fakeUser = new User("Bob");
-
 /**
  * The currently connected users
  */
-let users: User[] = [fakeUser];
+let users: User[];
 
 /**
  * Handler for the initial connection
