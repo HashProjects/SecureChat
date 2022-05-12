@@ -3,9 +3,9 @@ import { v4 as uuid } from "uuid";
 class User {
   public name: string;
   public id: string;
-  constructor(username: string) {
+  constructor(username: string, id?: string) {
     this.name = username;
-    this.id = uuid();
+    this.id = (!id) ? uuid() : id;
   }
 
   toString() {
