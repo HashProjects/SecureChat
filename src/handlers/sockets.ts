@@ -21,14 +21,14 @@ export const connection = (socket: Socket) => {
   /**
    * Send all online users
    */
-  socket.emit("online", users);
+  socket.emit("usersOnline", users);
 
   /**
    * Middleware logging for sockets
-   * @param {Event} e - list of arguments
+   * @param {Event} event - list of arguments
    */
-  socket.use((e: Event, next) => {
-    logging.info(NAMESPACE, `SOCK '${e[0]}' ${socket.id}`);
+  socket.use((event: Event, next) => {
+    logging.info(NAMESPACE, `SOCK '${event[0]}' ${socket.id}`);
     next();
   });
 
