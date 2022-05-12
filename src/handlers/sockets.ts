@@ -14,7 +14,7 @@ let users: User[];
  * @param {Socket} socket
  */
 export const connection = (socket: Socket) => {
-  logging.info(NAMESPACE, `SOCK 'connection' ${socket.id}`);
+  logging.debug(NAMESPACE, `SOCK 'connection' ${socket.id}`);
 
   /**
    * Send all online users
@@ -26,7 +26,7 @@ export const connection = (socket: Socket) => {
    * @param {Event} event - list of arguments
    */
   socket.use((event: Event, next) => {
-    logging.info(NAMESPACE, `SOCK '${event[0]}' ${socket.id}`);
+    logging.debug(NAMESPACE, `SOCK '${event[0]}' ${socket.id}`);
     next();
   });
 
@@ -34,6 +34,6 @@ export const connection = (socket: Socket) => {
    * On Socket disconnect
    */
   socket.on("disconnect", () => {
-    logging.info(NAMESPACE, `SOCK 'disconnect' ${socket.id}`);
+    logging.debug(NAMESPACE, `SOCK 'disconnect' ${socket.id}`);
   });
 };
