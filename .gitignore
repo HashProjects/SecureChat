@@ -1,7 +1,11 @@
 # Mac Finder File
 .DS_Store
 
+# Transpiled Javascript Files
 build/
+
+# sqlite database files
+*.db
 
 # Logs
 logs
