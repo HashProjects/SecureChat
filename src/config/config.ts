@@ -9,7 +9,7 @@ const PORT: number = +(process.env.PORT ?? 8888);
 const LOG_LEVEL: LEVEL = (process.env.LOG_LEVEL as LEVEL) || "debug";
 const ROOT_DIR = path.join(__dirname + "../../..");
 const JWT_PRIVATE = process.env.PRIVATE_KEY || "keys/default_jwt.key";
-const JWT_PUBLIC = process.env.PUBLIC_KEY || "keys/default_jwt.pub";
+const JWT_PUBLIC = process.env.PUBLIC_KEY || "keys/default_jwt.key.pub";
 
 const SERVER = {
   host: HOSTNAME,
