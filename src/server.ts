@@ -7,6 +7,7 @@ import api from "./routes/api";
 import main from "./routes/main";
 import { connection } from "./handlers/sockets";
 import { logger, notFound } from "./handlers/middleware";
+import cookieParser from "cookie-parser";
 
 const NAMESPACE = "index";
 const HOST = config.server.host;
@@ -19,12 +20,17 @@ export const io = new Server(server);
 /**
  * Puts url encoded data into the request body
  */
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 /**
  * Converts the request body to json
  */
 app.use(express.json());
+
+/**
+ * Parses cookies from request header
+ */
+app.use(cookieParser());
 
 /**
  * Logs all requests and responses
