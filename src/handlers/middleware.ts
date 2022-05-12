@@ -4,8 +4,8 @@ import { Request, Response, NextFunction } from "express";
 const NAMESPACE = "middleware";
 
 export const logger = (req: Request, res: Response, next: NextFunction) => {
-  let ignore = /[(\.css)(\.js)(\.png)(\.ico)]/.test(req.url);
-  if (!ignore) logging.info(NAMESPACE, `${req.method} '${req.url}'`);
+  let ignore = /(\.css|\.js|\.png|\.ico)/.test(req.url);
+  if (!ignore) logging.info(NAMESPACE, `${req.method} '${req.url}'`, req.body);
 
   res.on("finish", () => {
     if (!ignore)
@@ -22,4 +22,4 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({
     message: "Error: 404 Not Found",
   });
-}
+};
