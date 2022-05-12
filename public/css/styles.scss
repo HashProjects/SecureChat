@@ -12,6 +12,10 @@ html {
   color: $fg;
 }
 
+div {
+  margin: 5px;
+}
+
 .center {
   width: 100%;
   display: flex;
@@ -32,6 +36,11 @@ h1 {
   margin: 20px;
 }
 
+h2 {
+  font-size: 2em;
+  margin: 15px;
+}
+
 .content {
   margin: 10px;
 }
@@ -40,12 +49,21 @@ form {
   padding: 5px;
 }
 
-label {
-  font-weight: 500;
+label,
+input {
   display: block;
+}
+
+input[type="submit"] {
+  cursor: pointer;
 }
 
 input {
   padding: 5px;
   border-radius: 3px;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(72, 160, 255);
 }
