@@ -29,7 +29,7 @@ npm run prod
 
 # Development
 
-Install deve dependencies
+Install dev dependencies
 
 ```bash
 npm install -g sass
