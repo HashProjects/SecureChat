@@ -64,6 +64,31 @@ input {
 }
 
 a {
+  cursor: pointer;
   text-decoration: none;
   color: rgb(72, 160, 255);
+}
+
+.button {
+  background-color: #ddd;
+  border: 1px $border solid;
+  border-radius: 5px;
+  color: black;
+  padding: 5px;
+}
+
+p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#error {
+  color: red;
+}
+
+#logout {
+  @extend .button;
+  position: absolute;
+  left: 10px;
+  top: 10px;
 }

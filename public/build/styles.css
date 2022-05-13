@@ -110,8 +110,32 @@ input {
 }
 
 a {
+  cursor: pointer;
   text-decoration: none;
   color: rgb(72, 160, 255);
+}
+
+.button, #logout {
+  background-color: #ddd;
+  border: 1px #aaa solid;
+  border-radius: 5px;
+  color: black;
+  padding: 5px;
+}
+
+p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#error {
+  color: red;
+}
+
+#logout {
+  position: absolute;
+  left: 10px;
+  top: 10px;
 }
 
 /*# sourceMappingURL=styles.css.map */
