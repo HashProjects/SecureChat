@@ -1,4 +1,4 @@
-import { login, register } from "../handlers/auth";
+import { login, logout, register } from "../handlers/auth";
 import { Request, Response, NextFunction } from "express";
 import { Router } from "express";
 import logging from "../config/logging";
@@ -13,5 +13,6 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 });
 router.post("/login", login);
 router.post("/register", register);
+router.post("/logout", logout);
 
 export default router;
