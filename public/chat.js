@@ -1,8 +1,53 @@
+// **********
+// Helpers
+// **********
+
+const createUserElement = (user) => {
+  let item = document.createElement("li");
+  item.innerText = user.username;
+  item.id = user.id;
+  onlineUserList.appendChild(item);
+};
+
+const deleteUserElement = (user) => {
+  let userElement = document.getElementById(user.id);
+  onlineUserList.removeChild(userElement);
+};
+
+//https://www.w3schools.com/js/js_cookies.asp
+const getCookie = (cname) => {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+};
+
 // *********
 // DOM References
 // *********
 
-let onlineUserList = document.getElementById("userList");
+const onlineUserList = document.getElementById("userList");
+
+// *********
+// API Calls
+// *********
+
+const logout = () => {
+  $.ajax({
+    type: "POST",
+    url: "/api/logout",
+    data: { id: getCookie("id") },
+  });
+};
 
 // *********
 // Sockets
@@ -12,7 +57,7 @@ let onlineUserList = document.getElementById("userList");
  * The Socket.io instance
  */
 let socket = io({
-  auth: getCookie(auth)
+  auth: getCookie("auth"),
 });
 
 /**
@@ -66,36 +111,3 @@ socket.on("userConnect", (...data) => {
   const user = data[0];
   deleteUserElement(user);
 });
-
-// **********
-// Helpers
-// **********
-
-const createUserElement = (user) => {
-  let item = document.createElement("li");
-  item.innerText = user.username;
-  item.id = user.id;
-  onlineUserList.appendChild(item);
-};
-
-const deleteUserElement = (user) => {
-  let userElement = document.getElementById(user.id);
-  onlineUserList.removeChild(userElement);
-};
-
-//https://www.w3schools.com/js/js_cookies.asp
-const getCookie = (cname) => {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
