@@ -1,27 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureChat</title>
-    <link rel="stylesheet" type="text/css" href="build/styles.css" media="screen" />
-  </head>
-  <body>
-    <div class="content"></div>
-      <div class="center">
-        <h2>Register</h2>
-        <div class="panel">
-          <form method="POST" action="/api/register">
-            <label for="username"> Username </label>
-            <input name="username" type="text" id="username"><br>
-            <label for="password"> Password </label>
-            <input name="password" type="password" id="password"><br>
-            <input type="submit" id="submit">
-          </form>
-        </div>
-        <a href="/login">Click here to login</a>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureChat</title>
+  <link rel="stylesheet" type="text/css" href="build/styles.css" media="screen" />
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+</head>
+
+<script>
+  $(document).ready(() => {
+    $("#form").on('submit', (e) => {
+      e.preventDefault();
+      $.ajax({
+        method: "POST",
+        url: "/api/register",
+        data: {
+          username: $("#username").val(),
+          password: $("#password").val(),
+        },
+        success: (data) => {
+          window.location = "/chat";
+        },
+        error: (e) => {
+          $("#error").text(e.responseJSON.message);
+        }
+      })
+    })
+  })
+</script>
+
+<body>
+  <div class="content">
+    <div class="center">
+      <h2>Register</h2>
+      <div class="panel">
+        <form id="form" method="POST">
+          <label for="username"> Username </label>
+          <input name="username" type="text" id="username"><br>
+          <label for="password"> Password </label>
+          <input name="password" type="password" id="password"><br>
+          <input type="submit" class="button" id="submit">
+        </form>
       </div>
+      <a href="/login">Click here to register</a>
+      <p id="error"></p>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
