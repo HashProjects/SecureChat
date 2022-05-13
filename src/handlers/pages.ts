@@ -10,12 +10,25 @@ const dir = (file: string) => {
   return path.join(config.rootDir + "/public/" + file);
 };
 
-export const home = (req: Request, res: Response) => {
-  res.sendFile(dir("index.html"))
+export const home = async (req: Request, res: Response) => {
+  const authed = await auth(req.cookies.auth);
+  if (!authed) {
+    res.clearCookie("auth");
+    res.clearCookie("username");
+    res.clearCookie("id");
+    return res.redirect("/login");
+  }
+  res.redirect("/chat");
 };
 
-export const chat = (req: Request, res: Response) => {
-  if (!auth(req.cookies.auth)) return res.redirect("/login");
+export const chat = async (req: Request, res: Response) => {
+  const authed = await auth(req.cookies.auth);
+  if (!authed) {
+    res.clearCookie("auth");
+    res.clearCookie("username");
+    res.clearCookie("id");
+    return res.redirect("/login");
+  }
   res.sendFile(dir("chat.html"));
 };
 
