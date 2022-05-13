@@ -6,6 +6,7 @@ CREATE TABLE Users (
     id CHAR(36),
     username VARCHAR UNIQUE,
     password VARCHAR,
+    version INT DEFAULT 0,
     PRIMARY KEY (id)
 );
 
