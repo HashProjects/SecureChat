@@ -1,25 +1,32 @@
 import { Event, Socket } from "socket.io";
 import logging from "../config/logging";
 import User from "../models/User";
+import UserSocket from "../models/UserSocket";
 
 const NAMESPACE = "sockets";
 
 /**
  * The currently connected users
  */
-let users: User[];
+let users: User[] = [];
 
 /**
  * Handler for the initial connection
- * @param {Socket} socket
+ * @param {UserSocket} sock
  */
-export const connection = (socket: Socket) => {
+export const connection = (sock: Socket) => {
+  const socket = sock as UserSocket;
+
   logging.debug(NAMESPACE, `SOCK 'connection' ${socket.id}`);
 
   /**
    * Send all online users
    */
   socket.emit("usersOnline", users);
+
+  const user = new User(socket.username, socket.id);
+
+  users.push(user);
 
   /**
    * Middleware logging for sockets
