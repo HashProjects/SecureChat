@@ -57,7 +57,9 @@ const logout = () => {
  * The Socket.io instance
  */
 let socket = io({
-  auth: getCookie("auth"),
+  auth: {
+    token: getCookie("auth"),
+  },
 });
 
 /**
