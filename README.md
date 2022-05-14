@@ -144,6 +144,14 @@ JWTs contain a digital signature that guarantees integrity.
 
 ### `connection`
 
+```
+{
+  auth: {
+    token: string,
+  }
+}
+```
+
 ---
 
 ### `disconnect`
