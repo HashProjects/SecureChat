@@ -190,7 +190,7 @@ JWTs contain a digital signature that guarantees integrity.
 - Add POST endpoint for creating a chatroom
   > **request**
   >
-  > ```json
+  > ```
   > {
   >  creator_id: string,
   >  user_ids: string[]
@@ -199,7 +199,7 @@ JWTs contain a digital signature that guarantees integrity.
   >
   > **response**
   >
-  > ```json
+  > ```
   > {
   >  group_id: string
   > }
