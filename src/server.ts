@@ -8,6 +8,7 @@ import main from "./routes/main";
 import { connection } from "./handlers/sockets";
 import { logger, notFound } from "./handlers/middleware";
 import cookieParser from "cookie-parser";
+import { sockAuth } from "./handlers/auth/sock";
 
 const NAMESPACE = "index";
 const HOST = config.server.host;
@@ -56,6 +57,11 @@ app.use(express.static("public"));
  * 404 Error handling
  */
 app.use(notFound);
+
+/**
+ * Authenticate all socket messages
+ */
+io.use(sockAuth);
 
 /**
  * Socket Connection
