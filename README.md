@@ -168,7 +168,7 @@ JWTs contain a digital signature that guarantees integrity.
 ## Front-end
 
 - Use LocalStorage instead of cookies
-- Better rendering of online users (wait till sockets more work on sockets are finished)
+- Better rendering of online users (wait till more work on sockets are finished)
 - Interface for a chat room (Message box, previous messages, users in room)
 
 ## Back-end
