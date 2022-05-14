@@ -1,4 +1,4 @@
-import { login, logout, register } from "../handlers/auth";
+import { login, logout, register } from "../handlers/auth/http";
 import { Request, Response, NextFunction } from "express";
 import { Router } from "express";
 import logging from "../config/logging";
