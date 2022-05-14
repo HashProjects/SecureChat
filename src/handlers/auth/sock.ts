@@ -13,8 +13,8 @@ export const sockAuth = async (socket: Socket, next: any) => {
   const data = await auth(token);
   if (!data) return next(new Error("Unauthorized. Invalid Token"));
 
-  (socket as UserSocket).username = data.username;
-  (socket as UserSocket).id = data.id;
+  (socket as UserSocket).user.name = data.username;
+  (socket as UserSocket).user.id = data.id;
 
   logging.debug(NAMESPACE, "auth successful");
 

@@ -24,7 +24,7 @@ export const connection = (sock: Socket) => {
    */
   socket.emit("usersOnline", users);
 
-  const user = new User(socket.username, socket.id);
+  const user = new User(socket.user.name, socket.user.id);
 
   users.push(user);
 
