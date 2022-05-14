@@ -204,3 +204,4 @@ JWTs contain a digital signature that guarantees integrity.
   >  group_id: string
   > }
   > ```
+- Add DELETE endpoint for deleting a chatroom
