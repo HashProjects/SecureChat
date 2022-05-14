@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import config from "../config/config";
 import path from "path";
-import { auth } from "./auth";
+import { auth } from "./auth/helpers";
 import logging from "../config/logging";
 
 const NAMESPACE = "pages";
