@@ -171,21 +171,36 @@ JWTs contain a digital signature that guarantees integrity.
 - Better rendering of online users (wait till sockets more work on sockets are finished)
 - Interface for a chat room (Message box, previous messages, users in room)
 
-
 ## Back-end
 
 - Return auth and user info in json response instead of setting cookies
 - Add socket rooms for chat rooms
 - Add `Message` table to DB
-    - `id PRIMARY`
-    - `text`
-    - `room_id`
-    - `timestamp`
-    - `user_id`
+  - `id PRIMARY`
+  - `text`
+  - `room_id`
+  - `timestamp`
+  - `user_id`
 - Add `ChatRoom` table to DB
-    - `id PRIMARY`
-    - `users`
-    - `key`
+  - `id PRIMARY`
+  - `users`
+  - `key`
 - Distribute keys to users in the room
 - Encrypt messages in rooms using the keys
-
+- Add POST endpoint for creating a chatroom
+  > **request**
+  >
+  > ```json
+  > {
+  >  creator_id: string,
+  >  user_ids: string[]
+  > }
+  > ```
+  >
+  > **response**
+  >
+  > ```json
+  > {
+  >  group_id: string
+  > }
+  > ```
