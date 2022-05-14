@@ -1,63 +1,20 @@
 import { Request, Response } from "express";
-import logging from "../config/logging";
-import { query } from "../helpers/db";
-import User from "../models/User";
+import logging from "../../config/logging";
+import { query } from "../../helpers/db";
+import User from "../../models/User";
 import bcrypt from "bcrypt";
-import jwt, { Algorithm, JwtPayload } from "jsonwebtoken";
-import config from "../config/config";
-import { readFileSync } from "fs";
+import config from "../../config/config";
+import { sign } from "./helpers";
 
-const NAMESPACE = "auth";
-const SALT_ROUNDS = 10;
-
-/* Read JWT keys from files */
-const PRIVATE_KEY = readFileSync(config.jwt.private);
-const PUBLIC_KEY = readFileSync(config.jwt.public);
-
-const EXPIRATION = 60 * 60; // 1 hour
+const NAMESPACE = "httpAuth";
 
 const COOKIE_OPTIONS = {
-  maxAge: 1000 * EXPIRATION,
-};
-
-/**
- * The Signing options for the JWT tokens
- */
-const JWT_OPTIONS = {
-  expiresIn: EXPIRATION,
-  algorithm: "RS256" as Algorithm,
+  maxAge: 1000 * config.auth.expire,
 };
 
 type authInfo = {
   username: string;
   password: string;
-};
-
-/**
- * Warning if Default JWT Key is being used
- */
-if (config.jwt.private.includes("default")) {
-  logging.warn(
-    NAMESPACE,
-    "Default JWT Key used. This is unsafe for production. Only use for development. Refer to the README for key generation"
-  );
-}
-
-/**
- * Attempts to authenticate the provided jwt token
- * @param {string} token - The JWT token
- */
-export const auth = async (token: string) => {
-  if (!token) return;
-
-  const data = verify(token);
-  if (!data) return false;
-
-  const version = await getVersion(data.id);
-
-  if (version === false || data.version !== version) return false;
-
-  return data;
 };
 
 /**
@@ -77,7 +34,7 @@ export const register = async (req: Request, res: Response) => {
   const user = new User(username);
 
   /* Hash and Salt Password */
-  const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS);
+  const hashedPassword = bcrypt.hashSync(password, config.auth.saltRounds);
 
   /* Insert into DB */
   await query("INSERT INTO Users (username, id, password, version) VALUES (?, ?, ?, 0)", [
@@ -203,53 +160,4 @@ export const logout = async (req: Request, res: Response) => {
   res.status(200).json({
     message: "Logged out",
   });
-};
-
-/**
- * The JWT version of the user, for token invalidation
- * @param {string} id - the id of the user
- * @returns the verison of users jwt token
- */
-const getVersion = async (id: string): Promise<number | false> => {
-  const rows = await query("SELECT version FROM Users WHERE id = ?", [id]).catch((e) => {
-    logging.error(NAMESPACE, "Database Error", e);
-  });
-
-  if (!rows?.length || rows[0].version === undefined) {
-    logging.error(NAMESPACE, "User token version not found");
-    return false;
-  }
-
-  return rows[0].version;
-};
-
-/**
- * Verifies the JWT token and returns its data.
- * @param {string} token - the JWT token
- */
-const verify = (token: string): JwtPayload | false => {
-  try {
-    const data = jwt.verify(token, PUBLIC_KEY) as JwtPayload;
-
-    logging.debug("authenticate", "verify successful", data);
-
-    return data;
-  } catch (e) {
-    logging.debug(NAMESPACE, "jwt.verify error", e);
-  }
-
-  return false;
-};
-
-/**
- * @param {User} user
- * @param {number} version
- * @returns the signed JWT token
- */
-const sign = (user: User, version: number): string => {
-  return jwt.sign(
-    { username: user.name, id: user.id, version: Math.floor(version) },
-    PRIVATE_KEY,
-    JWT_OPTIONS
-  );
 };
