@@ -39,6 +39,11 @@ app.use(cookieParser());
 app.use(logger);
 
 /**
+ * Try to find the file in the public directory
+ */
+app.use(express.static("public"));
+
+/**
  * Routes to the api router
  */
 app.use("/api", api);
@@ -47,11 +52,6 @@ app.use("/api", api);
  * Routes to the main router
  */
 app.use("/", main);
-
-/**
- * If route is not in routers, find file in public files
- */
-app.use(express.static("public"));
 
 /**
  * 404 Error handling
