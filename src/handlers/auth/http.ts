@@ -72,8 +72,7 @@ export const register = async (req: Request, res: Response) => {
   res.status(200).json({
     message: "Successfully registered",
     auth: authCode,
-    username: user.name,
-    userId: user.id,
+    user: user,
   });
 };
 
@@ -126,15 +125,14 @@ export const login = async (req: Request, res: Response) => {
   /* Sign JWT */
   const authCode = sign(user, version);
 
-  logging.debug(NAMESPACE, "Generated JWT Token", authCode);
+  logging.debug(NAMESPACE, "Generated JWT Token");
 
   res.cookie("auth", authCode, COOKIE_OPTIONS);
 
   res.status(200).json({
     message: "Successfully logged in",
     auth: authCode,
-    username: user.name,
-    userId: user.id,
+    user: user,
   });
 };
 
