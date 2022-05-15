@@ -191,8 +191,10 @@ JWTs contain a digital signature that guarantees integrity.
   - `user_id`
 - Add `ChatRoom` table to DB
   - `id PRIMARY`
-  - `users`
   - `key`
+- Add `UserRooms` table to DB
+  - `user_id`
+  - `room_id`
 - Distribute keys to users in the room
 - Encrypt messages in rooms using the keys
 - Add POST endpoint for creating a chatroom
