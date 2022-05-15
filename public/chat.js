@@ -55,11 +55,9 @@ const logout = () => {
 /**
  * The Socket.io instance
  */
-let socket = io({
-  auth: {
-    token: getCookie("auth"),
-  },
-});
+let socket = io();
+
+socket.emit;
 
 /**
  * Initial connection
