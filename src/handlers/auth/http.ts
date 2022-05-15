@@ -160,31 +160,15 @@ export const logout = async (req: UserRequest, res: Response) => {
 };
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-  const unAuth = () => res.status(401).json({ message: "Unauthorized" });
-  const authCode = parseAuth(req);
-  if (!authCode) return unAuth();
-
-  const user = await auth(authCode);
-  if (!user) return unAuth();
-
+  const user = await auth(parseAuth(req));
+  if (!user) return res.status(401).json({ message: "Unauthorized" });
   (req as UserRequest).user = user;
-
   next();
 };
 
 export const authenticatePage = async (req: Request, res: Response, next: NextFunction) => {
-  const unAuth = () => {
-    res.clearCookie("auth");
-    res.redirect("/login");
-  }
-
-  const authCode = parseAuth(req);
-  if (!authCode) return unAuth();
-
-  const user = await auth(authCode);
-  if (!user) return unAuth();
-
+  const user = await auth(parseAuth(req));
+  if (!user) return res.clearCookie("auth").redirect("/login");
   (req as UserRequest).user = user;
-
   next();
 };
