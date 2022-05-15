@@ -1,6 +1,7 @@
 import { chat, home, login, register } from "../handlers/pages";
 import express, { Router, Request, Response, NextFunction } from "express";
 import logging from "../config/logging";
+import { authenticatePage } from "../handlers/auth/http";
 
 const NAMESPACE = "main"
 
@@ -12,12 +13,14 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 
 /* Unauthenticated Routes */
 
-router.get("/", home);
 router.get("/login", login);
 router.get("/register", register);
 
 /* Authenticated Routes */
 
+router.use(authenticatePage);
+
+router.get("/", home);
 router.get("/chat", chat);
 
 export default router;
