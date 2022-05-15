@@ -23,6 +23,7 @@
           password: $("#password").val(),
         },
         success: (data) => {
+          localStorage.setItem("user", data.user)
           window.location = "/chat";
         },
         error: (e) => {
