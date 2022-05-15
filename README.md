@@ -175,13 +175,11 @@ JWTs contain a digital signature that guarantees integrity.
 
 ## Front-end
 
-- Use LocalStorage instead of cookies
 - Better rendering of online users (wait till more work on sockets are finished)
 - Interface for a chat room (Message box, previous messages, users in room)
 
 ## Back-end
 
-- Return auth and user info in json response instead of setting cookies
 - Add socket rooms for chat rooms
 - Add `Message` table to DB
   - `id PRIMARY`
