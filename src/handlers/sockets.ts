@@ -14,9 +14,7 @@ let users: User[] = [];
  * Handler for the initial connection
  * @param {UserSocket} sock
  */
-export const connection = (sock: Socket) => {
-  const socket = sock as UserSocket;
-
+export const connection = (socket: UserSocket) => {
   logging.debug(NAMESPACE, `SOCK 'connection' ${socket.id}`);
 
   /**

@@ -2,7 +2,7 @@ import http from "http";
 import express from "express";
 import config from "./config/config";
 import logging from "./config/logging";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import api from "./routes/api";
 import main from "./routes/main";
 import { connection } from "./handlers/sockets";
@@ -66,7 +66,7 @@ io.use(sockAuth);
 /**
  * Socket Connection
  */
-io.on("connection", connection);
+io.on("connection", connection as (socket: Socket) => void);
 
 /**
  * Start listening on port
