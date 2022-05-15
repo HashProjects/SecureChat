@@ -34,15 +34,15 @@ if (config.auth.jwt.private.includes("default")) {
  * Attempts to authenticate the provided jwt token
  * @param {string} token - The JWT token
  */
-export const auth = async (token: string): Promise<User | false> => {
-  if (!token) return false;
+export const auth = async (token: string | null): Promise<User | null> => {
+  if (!token) return null;
 
   const data = verify(token);
-  if (!data) return false;
+  if (!data) return null;
 
   const version = await getVersion(data.id);
 
-  if (version === false || data.version !== version) return false;
+  if (version === false || data.version !== version) return null;
 
   const user = new User(data.username, data.id);
   return user;
@@ -70,7 +70,7 @@ const getVersion = async (id: string): Promise<number | false> => {
  * Verifies the JWT token and returns its data.
  * @param {string} token - the JWT token
  */
-export const verify = (token: string): JwtPayload | false => {
+export const verify = (token: string): JwtPayload | null => {
   try {
     const data = jwt.verify(token, PUBLIC_KEY) as JwtPayload;
 
@@ -81,7 +81,7 @@ export const verify = (token: string): JwtPayload | false => {
     logging.debug(NAMESPACE, "jwt.verify error", e);
   }
 
-  return false;
+  return null;
 };
 
 /**
