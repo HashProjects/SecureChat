@@ -12,19 +12,10 @@ let users: User[] = [];
 
 /**
  * Handler for the initial connection
- * @param {UserSocket} sock
+ * @param {UserSocket} socket
  */
 export const connection = (socket: UserSocket) => {
   logging.debug(NAMESPACE, `SOCK 'connection' ${socket.id}`);
-
-  /**
-   * Send all online users
-   */
-  socket.emit("usersOnline", users);
-
-  const user = new User(socket.user.name, socket.user.id);
-
-  users.push(user);
 
   /**
    * Middleware logging for sockets
@@ -36,9 +27,22 @@ export const connection = (socket: UserSocket) => {
   });
 
   /**
+   * Send all online users
+   */
+  socket.broadcast.emit("userConnect", socket.user);
+  socket.emit("usersOnline", users);
+
+  const user = new User(socket.user.name, socket.user.id);
+  users.push(user);
+
+  /**
    * On Socket disconnect
    */
   socket.on("disconnect", () => {
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].id == socket.user.id) users.splice(i, 1);
+    }
+    socket.broadcast.emit("userDisconnect", socket.user);
     logging.debug(NAMESPACE, `SOCK 'disconnect' ${socket.id}`);
   });
 };
