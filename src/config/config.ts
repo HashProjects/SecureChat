@@ -10,7 +10,7 @@ const LOG_LEVEL: LEVEL = (process.env.LOG_LEVEL as LEVEL) || "debug";
 const ROOT_DIR = path.join(__dirname + "../../..");
 const JWT_PRIVATE = process.env.PRIVATE_KEY || "keys/default_jwt.key";
 const JWT_PUBLIC = process.env.PUBLIC_KEY || "keys/default_jwt.key.pub";
-const AUTH_EXPIRATION_MINUTES: number = +(process.env.AUTH_EXPIRATION_MINUTES || 60);
+const AUTH_EXPIRATION_SECONDS: number = +(process.env.AUTH_EXPIRATION_MINUTES || 60) * 60;
 const SALT_ROUNDS: number = +(process.env.SALT_ROUNDS || 10);
 
 const SERVER = {
@@ -26,7 +26,7 @@ const JWT = {
 const AUTH = {
   jwt: JWT,
   saltRounds: SALT_ROUNDS,
-  expire: AUTH_EXPIRATION_MINUTES,
+  expire: AUTH_EXPIRATION_SECONDS
 };
 
 const config = {
