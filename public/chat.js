@@ -1,10 +1,16 @@
+// *********
+// DOM References
+// *********
+
+const onlineUserList = document.getElementById("userList");
+
 // **********
 // Helpers
 // **********
 
 const createUserElement = (user) => {
   let item = document.createElement("li");
-  item.innerText = user.username;
+  item.innerText = user.name;
   item.id = user.id;
   onlineUserList.appendChild(item);
 };
@@ -32,12 +38,6 @@ const getCookie = (cname) => {
 };
 
 // *********
-// DOM References
-// *********
-
-const onlineUserList = document.getElementById("userList");
-
-// *********
 // API Calls
 // *********
 
@@ -56,8 +56,6 @@ const logout = () => {
  * The Socket.io instance
  */
 let socket = io();
-
-socket.emit;
 
 /**
  * Initial connection
@@ -88,8 +86,8 @@ socket.on("error", (error) => {});
 /**
  * A list of users currently online
  */
-socket.on("usersOnline", (...data) => {
-  const users = data[0];
+socket.on("usersOnline", (users) => {
+  console.log("Online users: ", users);
   users.forEach((user) => {
     createUserElement(user);
   });
@@ -98,15 +96,15 @@ socket.on("usersOnline", (...data) => {
 /**
  * A logged in user connected
  */
-socket.on("userConnect", (...data) => {
-  const user = data[0];
+socket.on("userConnect", (user) => {
+  console.log("userConnect", user);
   createUserElement(user);
 });
 
 /**
  * A logged in user disconnected
  */
-socket.on("userConnect", (...data) => {
-  const user = data[0];
+socket.on("userDisconnect", (user) => {
+  console.log("userDisconnect", user);
   deleteUserElement(user);
 });
