@@ -4,6 +4,7 @@ import User from "../../models/User";
 import jwt, { Algorithm, JwtPayload } from "jsonwebtoken";
 import config from "../../config/config";
 import { readFileSync } from "fs";
+import { Request } from "express";
 
 const NAMESPACE = "Auth Helpers";
 
@@ -94,4 +95,9 @@ export const sign = (user: User, version: number): string => {
     PRIVATE_KEY,
     JWT_OPTIONS
   );
+};
+
+export const parseAuth = (req: Request) => {
+  const authCode = req.header("Authentication")?.split(" ")[1] || req.cookies.auth;
+  return authCode;
 };
