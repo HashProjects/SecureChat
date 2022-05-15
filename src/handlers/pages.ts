@@ -11,24 +11,10 @@ const dir = (file: string) => {
 };
 
 export const home = async (req: Request, res: Response) => {
-  const authed = await auth(req.cookies.auth);
-  if (!authed) {
-    res.clearCookie("auth");
-    res.clearCookie("username");
-    res.clearCookie("id");
-    return res.redirect("/login");
-  }
   res.redirect("/chat");
 };
 
 export const chat = async (req: Request, res: Response) => {
-  const authed = await auth(req.cookies.auth);
-  if (!authed) {
-    res.clearCookie("auth");
-    res.clearCookie("username");
-    res.clearCookie("id");
-    return res.redirect("/login");
-  }
   res.sendFile(dir("chat.html"));
 };
 
