@@ -33,8 +33,8 @@ if (config.auth.jwt.private.includes("default")) {
  * Attempts to authenticate the provided jwt token
  * @param {string} token - The JWT token
  */
-export const auth = async (token: string) => {
-  if (!token) return;
+export const auth = async (token: string): Promise<User | false> => {
+  if (!token) return false;
 
   const data = verify(token);
   if (!data) return false;
@@ -43,7 +43,8 @@ export const auth = async (token: string) => {
 
   if (version === false || data.version !== version) return false;
 
-  return data;
+  const user = new User(data.username, data.id);
+  return user;
 };
 
 /**
