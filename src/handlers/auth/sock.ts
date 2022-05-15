@@ -6,15 +6,15 @@ import { Socket } from "socket.io";
 const NAMESPACE = "sockAuth";
 
 export const sockAuth = async (socket: Socket, next: any) => {
+  const unAuth = () => next(new Error("Unauthorized. Missing Token"));
   const token = socket.handshake.auth?.token as string;
 
-  if (!token) return next(new Error("Unauthorized. Missing Token"));
+  if (!token) return unAuth();
 
-  const data = await auth(token);
-  if (!data) return next(new Error("Unauthorized. Invalid Token"));
+  const user = await auth(token);
+  if (!user) return unAuth();
 
-  (socket as UserSocket).user.name = data.username;
-  (socket as UserSocket).user.id = data.id;
+  (socket as UserSocket).user = user;
 
   logging.debug(NAMESPACE, "auth successful");
 
