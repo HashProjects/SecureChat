@@ -45,7 +45,6 @@ const logout = () => {
   $.ajax({
     type: "POST",
     url: "/api/logout",
-    data: { id: getCookie("id") },
   });
 };
 
