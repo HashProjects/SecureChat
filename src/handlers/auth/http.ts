@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import logging from "../../config/logging";
 import { query } from "../../helpers/db";
 import User from "../../models/User";
 import bcrypt from "bcrypt";
 import config from "../../config/config";
-import { sign } from "./helpers";
+import { auth, parseAuth, sign } from "./helpers";
+import UserRequest from "../../models/UserRequest";
 
 const NAMESPACE = "httpAuth";
 
@@ -66,13 +67,13 @@ export const register = async (req: Request, res: Response) => {
 
   logging.debug(NAMESPACE, "Generated JWT Token", authCode);
 
-  /* Set Cookie */
   res.cookie("auth", authCode, COOKIE_OPTIONS);
-  res.cookie("username", user.name, COOKIE_OPTIONS);
-  res.cookie("id", user.id, COOKIE_OPTIONS);
 
   res.status(200).json({
     message: "Successfully registered",
+    auth: authCode,
+    username: user.name,
+    userId: user.id,
   });
 };
 
@@ -127,23 +128,20 @@ export const login = async (req: Request, res: Response) => {
 
   logging.debug(NAMESPACE, "Generated JWT Token", authCode);
 
-  /* Set Cookie */
   res.cookie("auth", authCode, COOKIE_OPTIONS);
-  res.cookie("username", user.name, COOKIE_OPTIONS);
-  res.cookie("id", user.id, COOKIE_OPTIONS);
 
   res.status(200).json({
     message: "Successfully logged in",
+    auth: authCode,
+    username: user.name,
+    userId: user.id,
   });
 };
 
 /**
  * Logs out the user. Updates the jwtVersion in the DB to invalidate all old JWTs
  */
-export const logout = async (req: Request, res: Response) => {
-  if (!req.body) return res.status(400).json({ message: "missing request body" });
-  if (!req.body.id) return res.status(400).json({ message: "Invalid User ID" });
-
+export const logout = async (req: UserRequest, res: Response) => {
   await query("UPDATE Users SET version = version + 1 WHERE id = ?", [req.body.id]).catch((e) => {
     logging.error(NAMESPACE, "Database Error", e);
     res.status(500).json({
@@ -155,9 +153,38 @@ export const logout = async (req: Request, res: Response) => {
   if (res.headersSent) return;
 
   res.clearCookie("auth");
-  res.clearCookie("username");
-  res.clearCookie("id");
+
   res.status(200).json({
     message: "Logged out",
   });
+};
+
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+  const unAuth = () => res.status(401).json({ message: "Unauthorized" });
+  const authCode = parseAuth(req);
+  if (!authCode) return unAuth();
+
+  const user = await auth(authCode);
+  if (!user) return unAuth();
+
+  (req as UserRequest).user = user;
+
+  next();
+};
+
+export const authenticatePage = async (req: Request, res: Response, next: NextFunction) => {
+  const unAuth = () => {
+    res.clearCookie("auth");
+    res.redirect("/login");
+  }
+
+  const authCode = parseAuth(req);
+  if (!authCode) return unAuth();
+
+  const user = await auth(authCode);
+  if (!user) return unAuth();
+
+  (req as UserRequest).user = user;
+
+  next();
 };
