@@ -22,6 +22,7 @@ CREATE TABLE Messages (
 DROP TABLE IF EXISTS ChatRoom;
 CREATE TABLE ChatRoom (
     id CHAR(36),
+    name VARCHAR,
     key VARCHAR,
     PRIMARY KEY(id)
 );
