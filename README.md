@@ -175,12 +175,20 @@ JWTs contain a digital signature that guarantees integrity.
 
 ## Front-end
 
-- Better rendering of online users (wait till more work on sockets are finished)
-- Interface for a chat room (Message box, previous messages, users in room)
+Better design
+  -  /chat and /chat/{room} could be fleshed out more
+
+Store symmetrical key for chats in local storage
+Encrypt messages before sending
 
 ## Back-end
 
-- Add socket rooms for chat rooms
-- Distribute keys to users in the room
-- Encrypt messages in rooms using the keys
+- On ChatRoom Creation:
+    - Generate symmetrical key
+    - Store in DB
+- Endpoint to retrieve the key for each room
+  - (probably just combine with /roomUsers, where the users and the keys are returned)
+
+- Check if a chat room exists before creating a new one, or have a list of chat rooms, and a less confusing way of creating chat rooms
+
 - Add DELETE endpoint for deleting a chatroom
