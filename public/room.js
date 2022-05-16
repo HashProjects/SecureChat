@@ -1,4 +1,10 @@
 // **********
+// Globals
+// **********
+
+var room;
+
+// **********
 // Helpers
 // **********
 
@@ -27,17 +33,15 @@ $("#chatButton").click(() => {
   socket.send(text);
 });
 
+const room_id = window.location.pathname.split("/").pop();
 $.ajax({
-  type: "POST",
-  url: "/api/roomusers",
-  contentType: "application/json",
+  type: "GET",
+  url: `/api/room/${room_id}`,
   dataType: "json",
-  data: JSON.stringify({
-    room: window.location.pathname.split("/").pop(),
-  }),
   success: (data) => {
     const myId = localStorage.getItem("userId");
-    data.users.forEach((user) => {
+    room = data.room;
+    room.users.forEach((user) => {
       if (user.id != myId) {
         createUserElement(user);
       }
@@ -84,7 +88,7 @@ socket.on("error", (error) => {});
  * A message from another user
  */
 socket.on("message", (username, msg) => {
-  console.log("message", username, msg)
+  console.log("message", username, msg);
   createMessageElement(username, msg);
 });
 
@@ -93,8 +97,12 @@ socket.on("message", (username, msg) => {
  */
 socket.on("usersOnline", (users) => {
   console.log("Online users: ", users);
-  users.forEach((user) => {
-    // createUserElement(user);
+  users.forEach((u1) => {
+    room.users.forEach((u2) => {
+      if (u1.id == u2.id) {
+        $(`#${u1.id}`).addClass("online");
+      }
+    })
   });
 });
 
