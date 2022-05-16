@@ -2,7 +2,8 @@ import { authenticate, login, logout, register } from "../handlers/auth/http";
 import { Request, Response, NextFunction } from "express";
 import { Router } from "express";
 import logging from "../config/logging";
-import { createRoom, roomUsers } from "../handlers/rooms";
+import { createRoom, room } from "../handlers/rooms";
+import { user } from "../handlers/user";
 
 const NAMESPACE = "API Router";
 
@@ -24,7 +25,8 @@ router.use(authenticate);
 
 router.post("/logout", logout as (req: Request, res: Response) => Promise<void>);
 router.post("/createRoom", createRoom as (req: Request, res: Response) => Promise<void>);
-router.post("/roomusers", roomUsers as (req: Request, res: Response) => Promise<void>);
+router.get("/room/:id", room as (req: Request, res: Response) => Promise<void>);
+router.get("/user/:id", user as (req: Request, res: Response) => Promise<void>);
 // router.post("/deleteRoom", logout as (req: Request, res: Response) => Promise<void>);
 
 export default router;
