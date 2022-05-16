@@ -40,7 +40,7 @@ export const connection = (socket: UserSocket) => {
    * When the user sends a message
    */
   socket.on("message", (msg) => {
-    socket.broadcast.emit(socket.user.name, msg);
+    socket.nsp.emit("message", socket.user.name, msg);
   });
 
   /**

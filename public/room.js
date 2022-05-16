@@ -2,9 +2,9 @@
 // Helpers
 // **********
 
-const createMessageElement = (name, message) => {
+const createMessageElement = (name, msg) => {
   let item = document.createElement("li");
-  item.innerText = `${name}: ${message}`;
+  item.innerText = `${name}: ${msg}`;
   item.classList.add("message");
   $("#messageList").append(item);
 };
@@ -24,9 +24,7 @@ const createUserElement = (user) => {
 
 $("#chatButton").click(() => {
   const text = $("#chatBox").val();
-  console.log(text);
   socket.send(text);
-  createMessageElement(localStorage.getItem("username"), text)
 });
 
 $.ajax({
@@ -85,9 +83,9 @@ socket.on("error", (error) => {});
 /**
  * A message from another user
  */
-socket.on("message", (data) => {
-  console.log("message", data[0], data[1]);
-  createMessageElement(data[0], data[1]);
+socket.on("message", (username, msg) => {
+  console.log("message", username, msg)
+  createMessageElement(username, msg);
 });
 
 /**
