@@ -190,8 +190,7 @@ Encrypt messages before sending
 - On ChatRoom Creation:
     - Generate symmetrical key
     - Store in DB
-- Endpoint to retrieve the key for each room
-  - (probably just combine with /roomUsers, where the users and the keys are returned)
+- Make sure the key is returned from /room
 
 - Check if a chat room exists before creating a new one, or have a list of chat rooms, and a less confusing way of creating chat rooms
 
