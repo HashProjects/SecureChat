@@ -12,9 +12,9 @@ export const createRoom = async (req: Request, res: Response) => {
   if (!req.body.users) return res.status(400).json({ message: "Invalid User List" });
 
   const users: User[] = req.body.users;
-  const room = new ChatRoom(users);
+  const room = new ChatRoom(users, req.body.name);
 
-  await query("INSERT INTO ChatRoom (id) VALUES (?)", [room.id]).catch((e) => {
+  await query("INSERT INTO ChatRoom (id, name) VALUES (?, ?)", [room.id, room.name]).catch((e) => {
     logging.error(NAMESPACE, "Database Error", e);
     res.status(500).json({
       message: "Database Error",
@@ -36,21 +36,21 @@ export const createRoom = async (req: Request, res: Response) => {
 
   if (res.headersSent) return;
 
+  logging.debug(NAMESPACE, "room", room);
+
   res.status(201).json({
     message: "Succesfully Created Room",
     room: room,
   });
 };
 
-export const roomUsers = async (req: Request, res: Response) => {
-  if (!req.body) return res.status(400).json({ message: "missing request body" });
-  if (!req.body.room) return res.status(400).json({ message: "Invalid Room id" });
-
-  const room = new ChatRoom([], req.body.room);
+export const room = async (req: Request, res: Response) => {
+  const room_id = req.params.id;
+  if (!room_id) return res.status(400).json({ message: "Invalid Room id" });
 
   const users = await query(
     "SELECT name, id FROM Users JOIN ChatRoomUsers ON ChatRoomUsers.user_id=Users.id WHERE room_id = ?",
-    [room.id]
+    [room_id]
   ).catch((e) => {
     logging.error(NAMESPACE, "Database Error", e);
     res.status(500).json({
@@ -62,10 +62,10 @@ export const roomUsers = async (req: Request, res: Response) => {
 
   if (!users) return res.status(400).json({ message: "Room not found" });
 
-  room.users = users;
+  const room: ChatRoom = new ChatRoom(users, room_id);
 
   res.status(201).json({
-    message: "Found users.",
-    users: room.users,
+    message: "Found room",
+    room: room,
   });
 };
