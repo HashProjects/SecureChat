@@ -192,6 +192,4 @@ Encrypt messages before sending
     - Store in DB
 - Make sure the key is returned from /room
 
-- Check if a chat room exists before creating a new one, or have a list of chat rooms, and a less confusing way of creating chat rooms
-
 - Add DELETE endpoint for deleting a chatroom
