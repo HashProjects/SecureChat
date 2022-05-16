@@ -95,6 +95,41 @@ p {
   top: 10px;
 }
 
+#menus {
+  display: flex;
+  align-items: space-evenly;
+  justify-content: space-evenly;
+  width: 70vw;
+}
+
+.boxList {
+  display: flex;
+  align-items: center;
+  border: 2px $border solid;
+  border-radius: 5px;
+  width: 200px;
+  padding: 10px;
+  flex-direction: column;
+  h3 {
+    margin-bottom: 15px;
+  }
+  li {
+    width: 100%;
+    padding: 5px;
+    border: 1px $border solid;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      background-color: #efefef;
+    }
+  }
+}
+
+#chatList {
+  @extend .boxList;
+}
+
 #room {
   display: flex;
   flex-direction: row;
@@ -130,27 +165,7 @@ p {
 }
 
 #userList {
-  display: flex;
-  align-items: center;
-  border: 2px $border solid;
-  border-radius: 5px;
-  width: 200px;
-  padding: 10px;
-  flex-direction: column;
-  h3 {
-    margin-bottom: 15px;
-  }
-  li {
-    width: 100%;
-    padding: 5px;
-    border: 1px $border solid;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
-    &:hover {
-      background-color: #efefef;
-    }
-  }
+  @extend .boxList;
 }
 
 li.online::after {
