@@ -121,6 +121,8 @@ a {
   border-radius: 5px;
   color: black;
   padding: 5px;
+  display: inline-flex;
+  align-items: center;
 }
 
 p {
@@ -136,6 +138,75 @@ p {
   position: absolute;
   left: 10px;
   top: 10px;
+}
+
+#room {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 10px;
+}
+
+#chat {
+  width: 70vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#chatInput {
+  width: 100%;
+  display: flex;
+  gap: 5px;
+}
+
+#chatBox {
+  width: 100%;
+  padding: 3px;
+  font-size: 1.5em;
+}
+
+#messageList {
+  width: 100%;
+  height: 60vh;
+  border: 2px #aaa solid;
+  margin-bottom: 10px;
+}
+
+#userList {
+  display: flex;
+  align-items: center;
+  border: 2px #aaa solid;
+  border-radius: 5px;
+  width: 200px;
+  padding: 10px;
+  flex-direction: column;
+}
+#userList h3 {
+  margin-bottom: 15px;
+}
+#userList li {
+  width: 100%;
+  padding: 5px;
+  border: 1px #aaa solid;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+#userList li:hover {
+  background-color: #efefef;
+}
+
+li.online::after {
+  content: " - online";
+}
+
+@media screen and (max-width: 800px) {
+  #room {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 /*# sourceMappingURL=styles.css.map */
