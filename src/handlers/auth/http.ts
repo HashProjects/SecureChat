@@ -38,7 +38,7 @@ export const register = async (req: Request, res: Response) => {
   const hashedPassword = bcrypt.hashSync(password, config.auth.saltRounds);
 
   /* Insert into DB */
-  await query("INSERT INTO Users (username, id, password, version) VALUES (?, ?, ?, 0)", [
+  await query("INSERT INTO Users (name, id, password, version) VALUES (?, ?, ?, 0)", [
     user.name,
     user.id,
     hashedPassword,
@@ -65,8 +65,6 @@ export const register = async (req: Request, res: Response) => {
   /* Sign JWT */
   const authCode = sign(user, 0);
 
-  logging.debug(NAMESPACE, "Generated JWT Token", authCode);
-
   res.cookie("auth", authCode, COOKIE_OPTIONS);
 
   res.status(200).json({
@@ -88,7 +86,7 @@ export const login = async (req: Request, res: Response) => {
   const { username, password }: authInfo = req.body;
 
   /* Fetch hashedPassword from DB */
-  const rows = await query("SELECT password, id, version FROM Users WHERE username = ?", [
+  const rows = await query("SELECT password, id, version FROM Users WHERE name = ?", [
     username,
   ]).catch((err) => {
     /* Database failure */
