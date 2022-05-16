@@ -183,6 +183,10 @@ Encrypt messages before sending
 
 ## Back-end
 
+- Permanently store messages in DB
+
+- Endpoint for fetching previous chat messages (maybe just add to room get)
+
 - On ChatRoom Creation:
     - Generate symmetrical key
     - Store in DB

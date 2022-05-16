@@ -40,6 +40,7 @@ export const connection = (socket: UserSocket) => {
    * When the user sends a message
    */
   socket.on("message", (msg) => {
+    // Add message to DB
     socket.nsp.emit("message", socket.user.name, msg);
   });
 
