@@ -23,3 +23,4 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
     message: "Error: 404 Not Found",
   });
 };
+
