@@ -1,4 +1,10 @@
 // **********
+// Globals
+// **********
+
+var rooms;
+
+// **********
 // Helpers
 // **********
 
@@ -27,9 +33,20 @@ const createUserElement = (user) => {
         ],
       }),
       success: (data) => {
-        window.location = `/chat/${data.room.id}`;
+        createChatElement(data.room);
       },
     });
+  });
+};
+
+const createChatElement = (room) => {
+  let item = document.createElement("li");
+  item.innerText = room.name;
+  item.classList.add("chatRoom");
+  item.id = room.id;
+  $("#chatList").append(item);
+  $(`#${room.id}`).click((e) => {
+    window.location = `/chat/${room.id}`;
   });
 };
 
@@ -56,8 +73,22 @@ const getCookie = (cname) => {
 };
 
 // *********
+// Local Storage
+// *********
+
+// *********
 // API Calls
 // *********
+
+$.ajax({
+  type: "GET",
+  url: `/api/user/${localStorage.getItem("userId")}`,
+  success: (data) => {
+    data.rooms.forEach((room) => {
+      createChatElement(room);
+    });
+  },
+});
 
 const logout = () => {
   $.ajax({
