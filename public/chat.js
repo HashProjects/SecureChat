@@ -1,9 +1,3 @@
-// *********
-// DOM References
-// *********
-
-const onlineUserList = document.getElementById("userList");
-
 // **********
 // Helpers
 // **********
@@ -11,13 +5,37 @@ const onlineUserList = document.getElementById("userList");
 const createUserElement = (user) => {
   let item = document.createElement("li");
   item.innerText = user.name;
+  item.classList.add("user");
   item.id = user.id;
-  onlineUserList.appendChild(item);
+  $("#userList").append(item);
+  $(`#${user.id}`).click((e) => {
+    $.ajax({
+      type: "POST",
+      url: "/api/createRoom",
+      contentType: "application/json",
+      dataType: "json",
+      data: JSON.stringify({
+        users: [
+          {
+            id: localStorage.getItem("userId"),
+            name: localStorage.getItem("username"),
+          },
+          {
+            id: e.target.id,
+            name: e.target.innerText,
+          },
+        ],
+      }),
+      success: (data) => {
+        window.location = `/chat/${data.room.id}`;
+      },
+    });
+  });
 };
 
 const deleteUserElement = (user) => {
   let userElement = document.getElementById(user.id);
-  onlineUserList.removeChild(userElement);
+  $("#userList").removeChild(userElement);
 };
 
 //https://www.w3schools.com/js/js_cookies.asp
