@@ -2,6 +2,7 @@ import { Event, Socket } from "socket.io";
 import logging from "../config/logging";
 import User from "../models/User";
 import UserSocket from "../models/UserSocket";
+import { io } from "../server";
 
 const NAMESPACE = "sockets";
 
@@ -34,6 +35,13 @@ export const connection = (socket: UserSocket) => {
 
   const user = new User(socket.user.name, socket.user.id);
   users.push(user);
+
+  /**
+   * When the user sends a message
+   */
+  socket.on("message", (msg) => {
+    socket.broadcast.emit(socket.user.name, msg);
+  });
 
   /**
    * On Socket disconnect
