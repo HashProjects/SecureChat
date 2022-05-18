@@ -181,6 +181,11 @@ Better design
 Store symmetrical key for chats in local storage
 Encrypt messages before sending
 
+- Pressing ENTER in the chat message box should send the message
+- When a message is sent, the chat message box should be cleared
+- When entering a room, ask the user to confirm
+- When a user is logs in, ask the user which digital signature scheme will be used: RSA or DSA
+
 ## Back-end
 
 - Permanently store messages in DB
@@ -193,3 +198,22 @@ Encrypt messages before sending
 - Make sure the key is returned from /room
 
 - Add DELETE endpoint for deleting a chatroom
+
+- Add public key to user module (RSA or DSA based on user preference)
+
+- create a new endpoint for a user to get the symmetric key for a chatroom (/key)
+
+- consider using JWT that can use either RSA or DSA for digital signatures.
+  Does JWT meet the requirement of E(PUa, E(PRs, SymmetricKey)) that supplies the symmetric
+  key with confidentiality and digital signature of the Server?
+    - jsonwebtoken - https://github.com/auth0/node-jsonwebtoken
+
+- How does the user know the Public Key of the Server?
+
+- Add an RSA keypair and a DSA keypair to the Server?
+
+- Symmetric Key Encryption
+    - 256-bit keys
+    - CBC Mode
+    - send IV with the Key
+    - use Crypto-JS 4.1.1 library for AES - https://www.npmjs.com/package/crypto-js

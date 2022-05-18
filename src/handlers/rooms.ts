@@ -14,7 +14,7 @@ export const createRoom = async (req: Request, res: Response) => {
   const users: User[] = req.body.users;
   const room = new ChatRoom(users, req.body.name);
 
-  await query("INSERT INTO ChatRoom (id, name) VALUES (?, ?)", [room.id, room.name]).catch((e) => {
+  await query("INSERT INTO ChatRoom (id, name, key) VALUES (?, ?, ?)", [room.id, room.name, room.key]).catch((e) => {
     logging.error(NAMESPACE, "Database Error", e);
     res.status(500).json({
       message: "Database Error",
