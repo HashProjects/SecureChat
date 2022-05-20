@@ -243,6 +243,10 @@ p {
   color: rgb(11, 157, 28);
 }
 
+.message.user {
+  color: blue;
+}
+
 li.online::after {
   content: " - online";
 }
