@@ -3,6 +3,10 @@
 // **********
 
 var room;
+// current set key and iv to a default value
+// TODO: get these values from the server
+var symmetricKey = "e8f61f6bc3f8d36ea8828b62f574f9d767842572d677e34a7d618d5f7ea219ba";
+var initializationVector = "3472cd3b0041c4d9ce2283ff2dd2ed5c"
 
 // **********
 // Helpers
@@ -24,13 +28,25 @@ const createUserElement = (user) => {
   $("#userList").append(item);
 };
 
+// encrypt with AES-256-CBC
+const encryptMessage = (msg) => {
+  return CryptoJS.AES.encrypt(msg, symmetricKey, {iv : initializationVector}).toString();
+}
+
+// decrypt with AES-256-CBC
+const decryptMessage = (msg) => {
+  return CryptoJS.AES.decrypt(msg, symmetricKey, {iv : initializationVector}).toString(CryptoJS.enc.Utf8);
+}
+
 // **********
 // API
 // **********
 
 $("#chatButton").click(() => {
   const text = $("#chatBox").val();
-  socket.send(text);
+  msg = encryptMessage(text)
+  console.log("-> CHAT MESSAGE: plaintext = " + text + " => cipherText: " + msg);
+  socket.send(msg);
 });
 
 const room_id = window.location.pathname.split("/").pop();
@@ -89,7 +105,10 @@ socket.on("error", (error) => {});
  */
 socket.on("message", (username, msg) => {
   console.log("message", username, msg);
-  createMessageElement(username, msg);
+  // decrypt the message
+  text = decryptMessage(msg)
+  console.log("<- CHAT MESSAGE: text = " + text + " <= cipherText: " + msg);
+  createMessageElement(username, text);
 });
 
 /**
