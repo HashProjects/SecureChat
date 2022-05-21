@@ -21,8 +21,7 @@ const createUserElement = (user) => {
       contentType: "application/json",
       dataType: "json",
       data: JSON.stringify({
-        users: [
-          {
+        users: [{
             id: localStorage.getItem("userId"),
             name: localStorage.getItem("username"),
           },
@@ -85,6 +84,7 @@ $.ajax({
   url: `/api/user/${localStorage.getItem("userId")}`,
   success: (data) => {
     data.rooms.forEach((room) => {
+      //console.log(room.name);
       createChatElement(room);
     });
   },

@@ -230,6 +230,13 @@ p {
   gap: 10px;
 }
 
+#chat-stuff{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 10px;
+}
+
 #chat {
   width: 70vw;
   display: flex;
