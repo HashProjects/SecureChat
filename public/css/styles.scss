@@ -54,9 +54,9 @@ table {
 
 body,
 html {
-  background-image: url("../assets/prog-code.jpg");
+  // background-image: url("../assets/prog-code.jpg");
   font-family: Arial, Helvetica, sans-serif;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(32, 38, 39);
   color: #1a2a3a;
 }
 
@@ -100,12 +100,16 @@ div {
 }
 
 .panel {
-  background-image: url("../assets/AndroidPIT-encrypted-secure-security-lock-locked-locks-3-w810h462.jpg");
+  // background-image: url("../assets/AndroidPIT-encrypted-secure-security-lock-locked-locks-3-w810h462.jpg");
   border: 30px rgb(0, 0, 0) solid;
   color: #fff;
-  background-color: rgb(0, 187, 239);
+  background-color: rgb(54, 68, 72);
   border-radius: 25px;
   padding: 100px;
+}
+
+.encrypt-selection {
+  vertical-align: middle;
 }
 
 h1 {
@@ -169,10 +173,14 @@ p {
 }
 
 #menus {
+  padding-top: 20px;
+  padding-bottom: 20px;
   display: flex;
   align-items: space-evenly;
   justify-content: space-evenly;
   width: 70vw;
+  border-radius: 20px;
+  background-color: #000;
 }
 
 .boxList, #userList, #chatList {
