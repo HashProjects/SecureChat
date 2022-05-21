@@ -24,12 +24,15 @@ const createUserElement = (user) => {
   $("#userList").append(item);
 };
 
+
+
 // **********
 // API
 // **********
 
 $("#chatButton").click(() => {
   const text = $("#chatBox").val();
+  $("#chatBox").val('');
   socket.send(text);
 });
 

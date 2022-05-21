@@ -46,11 +46,20 @@
           <input name="username" type="text" id="username"><br>
           <label for="password"> Password </label>
           <input name="password" type="password" id="password"><br>
-          <input type="submit" class="button" id="submit">
+          <h3>Select an Encryption Type:</h3>
+          <div class="encrypt-selection">
+            <input type="radio" name="encryption" id="RSA" checked>
+            <label for="RSA">RSA</label>
+            <input type="radio" name="encryption" id="DSA">
+            <label for="DSA">DSA</label>
+          </div>
+          <input type="submit" class="button" id="submit" value="Login">
         </form>
+        <div style="padding-top:20px;">
+          <a href="/register" style="padding: 10px; color: white;">Click here to register</a>
+        </div>
+        <p id="error"></p>
       </div>
-      <a href="/register" style="color:white">Click here to register</a>
-      <p id="error"></p>
     </div>
   </div>
 </body>
