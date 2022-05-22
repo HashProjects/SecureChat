@@ -45,7 +45,7 @@ const decryptMessage = (msg) => {
 $("#chatButton").click(() => {
   const text = $("#chatBox").val();
   msg = encryptMessage(text)
-  console.log("-> CHAT MESSAGE: plaintext = " + text + " => cipherText: " + msg);
+  console.log("-> CHAT MESSAGE: plaintext = " + text + " => cipherText: " + msg + " with key: " + symmetricKey + " and iv:" + initializationVector);
   socket.send(msg);
 });
 
@@ -64,6 +64,27 @@ $.ajax({
     });
   },
 });
+
+$.ajax({
+  url: `/api/key`,
+  dataType: "json",
+  type: "POST",
+  contentType: "application/json",
+  data: JSON.stringify({
+    user_id: localStorage.getItem("userId"),
+    room_id: room_id,
+  }),
+  success: (data) => {
+    console.log("got the key")
+    //const myId = localStorage.getItem("userId");
+    symmetricKey = data.key;
+    initializationVector = data.iv;
+    console.log("symmetricKey = " + symmetricKey);
+    console.log("iv           = " + initializationVector);
+  },
+});
+
+
 
 // **********
 // Sockets
@@ -107,7 +128,7 @@ socket.on("message", (username, msg) => {
   console.log("message", username, msg);
   // decrypt the message
   text = decryptMessage(msg)
-  console.log("<- CHAT MESSAGE: text = " + text + " <= cipherText: " + msg);
+  console.log("<- CHAT MESSAGE: text = " + text + " <= cipherText: " + msg + " with key: " + symmetricKey + " and iv:" + initializationVector);
   createMessageElement(username, text);
 });
 

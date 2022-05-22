@@ -15,12 +15,14 @@ class ChatRoom {
   public id: string;
   public name: string;
   public key: string;
-  constructor(users: User[], name?: string, id?: string, key?: string) {
+  public iv: string;
+  constructor(users: User[], name?: string, id?: string, key?: string, iv?: string) {
     this.users = users;
     this.name = !name ? defaultName(users) : name;
     this.id = !id ? uuid() : id;
     // generate a random 32 bit key if not provided
     this.key = !key ? crypto.randomBytes(32).toString('hex') : key;
+    this.iv = !iv ? crypto.randomBytes(16).toString('hex') : key
   }
 }
 

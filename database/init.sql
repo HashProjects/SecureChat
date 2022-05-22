@@ -24,6 +24,7 @@ CREATE TABLE ChatRoom (
     id CHAR(36),
     name VARCHAR,
     key VARCHAR,
+    iv VARCHAR,
     PRIMARY KEY(id)
 );
 
