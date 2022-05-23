@@ -15,16 +15,17 @@
 <script>
   $(document).ready(() => {
     $("#form").on('submit', (e) => {
-
+      e.preventDefault();
       const radios = document.getElementsByName("signatureType");
       const signatureType = Array.from(radios).find(radio => radio.checked).value;
 
+      $("#status").text("Generating RSA KeyPair");
       const key = new NodeRSA();
       key.generateKeyPair(3072, 65537);
       var pemPrivate = key.exportKey('pkcs8')
       var pemPublic = key.exportKey('public')
+      $("#status").text("");
 
-      e.preventDefault();
       $.ajax({
         method: "POST",
         url: "/api/login",
@@ -74,6 +75,7 @@
       </div>
       <a href="/register">Click here to register</a>
       <p id="error"></p>
+      <p id="status"></p>
     </div>
   </div>
 </body>

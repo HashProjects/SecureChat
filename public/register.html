@@ -19,10 +19,12 @@
       const radios = document.getElementsByName("signatureType");
       const signatureType = Array.from(radios).find(radio => radio.checked).value;
 
+      $("#status").text("Generating RSA KeyPair");
       const key = new NodeRSA();
       key.generateKeyPair(3072, 65537);
       var pemPrivate = key.exportKey('pkcs8')
       var pemPublic = key.exportKey('public')
+      $("#status").text("");
 
       $.ajax({
         method: "POST",
@@ -73,6 +75,7 @@
       </div>
       <a href="/login">Click here to login</a>
       <p id="error"></p>
+      <p id="status"></p>
     </div>
   </div>
 </body>
