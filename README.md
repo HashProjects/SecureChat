@@ -186,12 +186,8 @@ Better design
   -  /chat and /chat/{room} could be fleshed out more
 
 Store symmetrical key for chats in local storage
-Encrypt messages before sending
 
-- Pressing ENTER in the chat message box should send the message
-- When a message is sent, the chat message box should be cleared
 - When entering a room, ask the user to confirm
-- When a user is logs in, ask the user which digital signature scheme will be used: RSA or DSA
 
 ## Back-end
 
@@ -200,8 +196,6 @@ Encrypt messages before sending
 - Endpoint for fetching previous chat messages (maybe just add to room get)
 
 - Add DELETE endpoint for deleting a chatroom
-
-- Add public key to client module (RSA-done) or DSA based on user preference)
 
 - consider using JWT that can use either RSA or DSA for digital signatures.
   - Does JWT meet the requirement of E(PUa, E(PRs, SymmetricKey)) that supplies the symmetric
@@ -212,21 +206,18 @@ Encrypt messages before sending
   - currently, the server sends the public key after register/login
   - Should we have a handshake instead?
 
-- Add a DSA keypair to the Server?
-    https://www.npmjs.com/package/node-rsa - npm install node-rsa
-
-    or
-    https://www.npmjs.com/package/jsrsasign
-    npm install jsrsasign jsrsasign-util
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
-
 Completed Items:
+- Pressing ENTER in the chat message box should send the message
+- When a message is sent, the chat message box should be cleared
+- When a user is logs in, ask the user which digital signature scheme will be used: RSA or DSA
+
 - Add an RSA keypair - use the one that exists already
   - https://www.npmjs.com/package/node-rsa - npm install node-rsa
   - browserify node-rsa for the clients
 
 - create a new endpoint for a user to get the symmetric key for a chatroom (/key)
 
+- Encrypt messages before sending
 - Symmetric Key Encryption
     - 256-bit keys
     - CBC Mode
@@ -238,3 +229,8 @@ Completed Items:
 - On ChatRoom Creation:
   - Generate symmetrical key
   - Store in DB
+
+- Add a DSA keypair to the Server
+  https://www.npmjs.com/package/jsrsasign
+  npm install jsrsasign jsrsasign-util
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
