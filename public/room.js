@@ -42,12 +42,27 @@ const decryptMessage = (msg) => {
 // API
 // **********
 
-$("#chatButton").click(() => {
+function sendMessage() {
   const text = $("#chatBox").val();
   msg = encryptMessage(text)
   console.log("-> CHAT MESSAGE: plaintext = " + text + " => cipherText: " + msg + " with key: " + symmetricKey + " and iv:" + initializationVector);
   socket.send(msg);
+  $("#chatBox").val('')
+}
+
+$("#chatButton").click(() => {
+  sendMessage()
 });
+
+$("#chatBox").on('keyup', function(event) {
+  try {
+    if (event.keyCode === 13) {
+      sendMessage();
+    }
+    false;
+  } catch (e) { };
+  return true
+})
 
 const room_id = window.location.pathname.split("/").pop();
 $.ajax({
@@ -58,7 +73,7 @@ $.ajax({
     const myId = localStorage.getItem("userId");
     room = data.room;
     room.users.forEach((user) => {
-      if (user.id != myId) {
+      if (user.id !== myId) {
         createUserElement(user);
       }
     });
