@@ -33,7 +33,7 @@ export const connection = (socket: UserSocket) => {
   socket.broadcast.emit("userConnect", socket.user);
   socket.emit("usersOnline", users);
 
-  const user = new User(socket.user.name, socket.user.id);
+  const user = new User(socket.user.name, "", "", socket.user.id);
   users.push(user);
 
   /**

@@ -4,7 +4,7 @@ import { query } from "../../helpers/db";
 import User from "../../models/User";
 import bcrypt from "bcrypt";
 import config from "../../config/config";
-import { auth, parseAuth, sign } from "./helpers";
+import {auth, parseAuth, PUBLIC_KEY, sign} from "./helpers";
 import UserRequest from "../../models/UserRequest";
 
 const NAMESPACE = "httpAuth";
@@ -16,6 +16,8 @@ const COOKIE_OPTIONS = {
 type authInfo = {
   username: string;
   password: string;
+  publicKey: string;
+  publicKeyType: string;
 };
 
 /**
@@ -29,19 +31,21 @@ export const register = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Missing request body" });
   if (!req.body.username?.length) return res.status(400).json({ message: "Invalid username" });
   if (!req.body.password?.length) return res.status(400).json({ message: "Invalid password" });
-  const { username, password }: authInfo = req.body;
+  const { username, password, publicKey, publicKeyType }: authInfo = req.body;
 
   /* Generate user object and uuidv4 */
-  const user = new User(username);
+  const user = new User(username, publicKey, publicKeyType);
 
   /* Hash and Salt Password */
   const hashedPassword = bcrypt.hashSync(password, config.auth.saltRounds);
 
   /* Insert into DB */
-  await query("INSERT INTO Users (name, id, password, version) VALUES (?, ?, ?, 0)", [
+  await query("INSERT INTO Users (name, id, password, version, publicKey, publicKeyType) VALUES (?, ?, ?, 0, ?, ?)", [
     user.name,
     user.id,
     hashedPassword,
+    user.publicKey,
+    user.publicKeyType
   ]).catch((err) => {
     /* Duplicate Username */
     if (err.code === "SQLITE_CONSTRAINT") {
@@ -71,6 +75,7 @@ export const register = async (req: Request, res: Response) => {
     message: "Successfully registered",
     auth: authCode,
     user: user,
+    serverPublicKey: PUBLIC_KEY.toString()
   });
 };
 
@@ -80,9 +85,12 @@ export const register = async (req: Request, res: Response) => {
  * { username: string, password: string }
  */
 export const login = async (req: Request, res: Response) => {
+  console.log(JSON.stringify(req.body))
   if (!req.body) return res.status(400).json({ message: "missing request body" });
   if (!req.body.username?.length) return res.status(400).json({ message: "Invalid Username" });
   if (!req.body.password?.length) return res.status(400).json({ message: "Invalid Password" });
+  if (!req.body.publicKey?.length) return res.status(400).json({ message: "Invalid Public Key" });
+  if (!req.body.publicKeyType?.length) return res.status(400).json({ message: "Invalid Public Key Type" });
   const { username, password }: authInfo = req.body;
 
   /* Fetch hashedPassword from DB */
@@ -110,7 +118,30 @@ export const login = async (req: Request, res: Response) => {
   const hashedPassword: string = rows[0].password;
   const id: string = rows[0].id;
   const version: number = rows[0].version;
-  const user = new User(username, id);
+  const publicKey: string = req.body.publicKey;
+  const publicKeyType: string = req.body.publicKeyType;
+  const user = new User(username, publicKey, publicKeyType, id);
+
+  /* Update the public keys for the user */
+  await query("UPDATE Users SET publicKey = ?, publicKeyType = ? WHERE id = ?", [
+    publicKey,
+    publicKeyType,
+    id
+  ]).catch((err) => {
+    /* Duplicate Username */
+    if (err.code === "SQLITE_CONSTRAINT") {
+      res.status(406).json({
+        message: "This username has already been taken",
+      });
+    } else {
+      /* Database failure */
+      logging.error(NAMESPACE, err);
+      res.status(500).json({
+        message: "Database Error",
+        error: err,
+      });
+    }
+  });
 
   /* Check Hashes */
   if (!bcrypt.compareSync(password, hashedPassword)) {
@@ -131,6 +162,7 @@ export const login = async (req: Request, res: Response) => {
     message: "Successfully logged in",
     auth: authCode,
     user: user,
+    serverPublicKey: PUBLIC_KEY.toString()
   });
 };
 

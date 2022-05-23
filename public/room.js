@@ -79,8 +79,45 @@ $.ajax({
     //const myId = localStorage.getItem("userId");
     symmetricKey = data.key;
     initializationVector = data.iv;
+    // TODO: remove logging of keys and also data.key and data.iv
     console.log("symmetricKey = " + symmetricKey);
     console.log("iv           = " + initializationVector);
+    console.log("encryptedKey = " + data.encryptedKey)
+
+    const key = localStorage.getItem("rsaKeyPrivate");
+    console.log(key);
+
+    const keyPublic = localStorage.getItem("rsaKeyPublic");
+    console.log(keyPublic);
+
+    //var encrypt = new JSEncrypt();
+    const keyPrivate = new NodeRSA();
+    keyPrivate.importKey(key);
+
+    const pt = keyPrivate.decrypt(data.encryptedKey, 'hex')
+    // first 64 characters are the symmetric key
+    symmetricKey = pt.slice(0, 64);
+    // then  32 characters of IV
+    initializationVector = pt.slice(64, 96);
+
+    // this is what is signed
+    const concat = symmetricKey + initializationVector;
+
+    // then digital signature
+    const signature = pt.slice(96);
+    console.log("signature: " + signature);
+
+    const keyServerPublic = new NodeRSA();
+    const serverPublicKey = localStorage.getItem("serverPublicKey");
+    console.log("server-public-key:--------------\n" + serverPublicKey);
+    keyServerPublic.importKey(serverPublicKey, 'public');
+    const verified = keyServerPublic.verify(concat, signature, 'hex', 'hex')
+
+    console.log(pt)
+    console.log("after decryption:----------------------");
+    console.log("symmetricKey = " + symmetricKey);
+    console.log("iv           = " + initializationVector);
+    console.log("verified = " + verified);
   },
 });
 

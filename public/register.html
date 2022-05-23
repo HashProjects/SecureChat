@@ -9,29 +9,41 @@
   <link rel="stylesheet" type="text/css" href="build/styles.css" media="screen" />
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="nodersa.js"></script>
 </head>
 
 <script>
   $(document).ready(() => {
     $("#form").on('submit', (e) => {
       e.preventDefault();
+      const key = new NodeRSA();
+      key.generateKeyPair(3072, 65537);
+      var pemPrivate = key.exportKey('pkcs8')
+      var pemPublic = key.exportKey('public')
+
       $.ajax({
         method: "POST",
         url: "/api/register",
         data: {
           username: $("#username").val(),
           password: $("#password").val(),
+          publicKey: pemPublic,
+          publicKeyType: "rsa"
         },
         success: (data) => {
           localStorage.setItem("username", data.user.name)
           localStorage.setItem("userId", data.user.id)
+          localStorage.setItem("serverPublicKey", data.serverPublicKey)
+          localStorage.setItem("rsaKeyPublic", pemPublic)
+          localStorage.setItem("rsaKeyPrivate", pemPrivate)
+
           window.location = "/chat";
         },
         error: (e) => {
           $("#error").text(e.responseJSON.message);
         }
       })
-    })
+    });
   })
 </script>
 

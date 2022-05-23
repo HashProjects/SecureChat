@@ -192,28 +192,42 @@ Encrypt messages before sending
 
 - Endpoint for fetching previous chat messages (maybe just add to room get)
 
-- On ChatRoom Creation:
-    - Generate symmetrical key
-    - Store in DB
-- Make sure the key is returned from /room
-
 - Add DELETE endpoint for deleting a chatroom
 
-- Add public key to user module (RSA or DSA based on user preference)
-
-- create a new endpoint for a user to get the symmetric key for a chatroom (/key)
+- Add public key to client module (RSA-done) or DSA based on user preference)
 
 - consider using JWT that can use either RSA or DSA for digital signatures.
-  Does JWT meet the requirement of E(PUa, E(PRs, SymmetricKey)) that supplies the symmetric
-  key with confidentiality and digital signature of the Server?
-    - jsonwebtoken - https://github.com/auth0/node-jsonwebtoken
+  - Does JWT meet the requirement of E(PUa, E(PRs, SymmetricKey)) that supplies the symmetric
+    key with confidentiality and digital signature of the Server? Only digital signature
+      - jsonwebtoken - https://github.com/auth0/node-jsonwebtoken
 
 - How does the user know the Public Key of the Server?
+  - currently, the server sends the public key after register/login
+  - Should we have a handshake instead?
 
-- Add an RSA keypair and a DSA keypair to the Server?
+- Add a DSA keypair to the Server?
+    https://www.npmjs.com/package/node-rsa - npm install node-rsa
+
+    or
+    https://www.npmjs.com/package/jsrsasign
+    npm install jsrsasign jsrsasign-util
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
+
+Completed Items:
+- Add an RSA keypair - use the one that exists already
+  - https://www.npmjs.com/package/node-rsa - npm install node-rsa
+  - browserify node-rsa for the clients
+
+- create a new endpoint for a user to get the symmetric key for a chatroom (/key)
 
 - Symmetric Key Encryption
     - 256-bit keys
     - CBC Mode
     - send IV with the Key
     - use Crypto-JS 4.1.1 library for AES - https://www.npmjs.com/package/crypto-js
+
+- Add public key to client module (RSA) or DSA based on user preference
+
+- On ChatRoom Creation:
+  - Generate symmetrical key
+  - Store in DB
