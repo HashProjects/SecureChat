@@ -20,6 +20,9 @@ const JWT_OPTIONS = {
 export const PRIVATE_KEY = readFileSync(config.auth.jwt.private);
 export const PUBLIC_KEY = readFileSync(config.auth.jwt.public);
 
+/* Read DSA keys from files */
+export const DSA_PRIVATE_KEY = readFileSync(config.dsa.private);
+export const DSA_PUBLIC_KEY = readFileSync(config.dsa.public);
 /**
  * Warning if Default JWT Key is being used
  */

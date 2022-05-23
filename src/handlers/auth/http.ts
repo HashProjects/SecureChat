@@ -4,7 +4,7 @@ import { query } from "../../helpers/db";
 import User from "../../models/User";
 import bcrypt from "bcrypt";
 import config from "../../config/config";
-import {auth, parseAuth, PUBLIC_KEY, sign} from "./helpers";
+import {auth, DSA_PUBLIC_KEY, parseAuth, PUBLIC_KEY, sign} from "./helpers";
 import UserRequest from "../../models/UserRequest";
 
 const NAMESPACE = "httpAuth";
@@ -71,11 +71,13 @@ export const register = async (req: Request, res: Response) => {
 
   res.cookie("auth", authCode, COOKIE_OPTIONS);
 
+  const serverPublicKey = publicKeyType === 'rsa' ? PUBLIC_KEY.toString() : DSA_PUBLIC_KEY.toString();
+
   res.status(200).json({
     message: "Successfully registered",
     auth: authCode,
     user: user,
-    serverPublicKey: PUBLIC_KEY.toString()
+    serverPublicKey: serverPublicKey
   });
 };
 
@@ -158,11 +160,13 @@ export const login = async (req: Request, res: Response) => {
 
   res.cookie("auth", authCode, COOKIE_OPTIONS);
 
+  const serverPublicKey = publicKeyType === 'rsa' ? PUBLIC_KEY.toString() : DSA_PUBLIC_KEY.toString();
+
   res.status(200).json({
     message: "Successfully logged in",
     auth: authCode,
     user: user,
-    serverPublicKey: PUBLIC_KEY.toString()
+    serverPublicKey: serverPublicKey,
   });
 };
 

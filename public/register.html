@@ -16,6 +16,9 @@
   $(document).ready(() => {
     $("#form").on('submit', (e) => {
       e.preventDefault();
+      const radios = document.getElementsByName("signatureType");
+      const signatureType = Array.from(radios).find(radio => radio.checked).value;
+
       const key = new NodeRSA();
       key.generateKeyPair(3072, 65537);
       var pemPrivate = key.exportKey('pkcs8')
@@ -28,7 +31,7 @@
           username: $("#username").val(),
           password: $("#password").val(),
           publicKey: pemPublic,
-          publicKeyType: "rsa"
+          publicKeyType: signatureType,
         },
         success: (data) => {
           localStorage.setItem("username", data.user.name)
@@ -36,6 +39,7 @@
           localStorage.setItem("serverPublicKey", data.serverPublicKey)
           localStorage.setItem("rsaKeyPublic", pemPublic)
           localStorage.setItem("rsaKeyPrivate", pemPrivate)
+          localStorage.setItem("signatureType", signatureType)
 
           window.location = "/chat";
         },
@@ -57,10 +61,17 @@
           <input name="username" type="text" id="username"><br>
           <label for="password"> Password </label>
           <input name="password" type="password" id="password"><br>
+          <h3>Select a signature scheme:</h3>
+          <div class="encrypt-selection">
+            <input type="radio" name="signatureType" id="RSA" checked value="rsa">
+            <label for="RSA">RSA</label>
+            <input type="radio" name="signatureType" id="DSA" value="dsa">
+            <label for="DSA">DSA</label>
+          </div>
           <input type="submit" class="button" id="submit">
         </form>
       </div>
-      <a href="/login">Click here to register</a>
+      <a href="/login">Click here to login</a>
       <p id="error"></p>
     </div>
   </div>

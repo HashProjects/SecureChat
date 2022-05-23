@@ -108,15 +108,24 @@ $.ajax({
 
     const keyServerPublic = new NodeRSA();
     const serverPublicKey = localStorage.getItem("serverPublicKey");
-    console.log("server-public-key:--------------\n" + serverPublicKey);
-    keyServerPublic.importKey(serverPublicKey, 'public');
-    const verified = keyServerPublic.verify(concat, signature, 'hex', 'hex')
+    const signatureType = localStorage.getItem("signatureType");
+    var verified = false;
+    if (signatureType === 'rsa') {
+      console.log("server-public-key:--------------\n" + serverPublicKey);
+      keyServerPublic.importKey(serverPublicKey, 'public');
+      verified = keyServerPublic.verify(concat, signature, 'hex', 'hex')
+    } else {
+      const sig2 = new KJUR.crypto.Signature({alg: 'SHA256withDSA'});
+      sig2.init(serverPublicKey);
+      sig2.updateString(concat);
+      verified = sig2.verify(signature);
+    }
 
     console.log(pt)
     console.log("after decryption:----------------------");
     console.log("symmetricKey = " + symmetricKey);
     console.log("iv           = " + initializationVector);
-    console.log("verified = " + verified);
+    console.log(signatureType + " verified = " + verified);
   },
 });
 

@@ -45,6 +45,13 @@ And a public key:
 Update the `.env` to use the new file names.
 In this example the private key was jwt.RS256.key and the public key was jwt.RS256.key.pub
 
+### DSA keys
+
+DSA key generation involves two steps:
+
+    openssl dsaparam -out dsaparam.pem 3072
+    openssl gendsa -out dsaprivkey.pem dsaparam.pem
+    openssl dsa -in dsaprivkey.pem -pubout -out dsapubkey.pem
 ---
 
 # Development

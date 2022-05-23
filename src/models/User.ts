@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
-import {PRIVATE_KEY, PUBLIC_KEY} from "../handlers/auth/helpers";
+import {DSA_PRIVATE_KEY, DSA_PUBLIC_KEY, PRIVATE_KEY, PUBLIC_KEY} from "../handlers/auth/helpers";
 const NodeRSA = require('node-rsa');
+const rs = require('jsrsasign');
 
 class User {
   public name: string;
@@ -26,12 +27,33 @@ class User {
     //  1. concatenated symmetricKey and iv
     //  2. signature
 
-    const keyServer = new NodeRSA();
     const pubUser = new NodeRSA();
-    keyServer.importKey(PRIVATE_KEY, 'pkcs1');
     pubUser.importKey(this.publicKey);
+    var signature: string;
 
-    const signature = keyServer.sign(concat, 'hex', 'hex');
+    if (this.publicKeyType == 'rsa') {
+      const keyServer = new NodeRSA();
+      keyServer.importKey(PRIVATE_KEY, 'pkcs1');
+      signature = keyServer.sign(concat, 'hex', 'hex');
+
+      // check the signature using the public key
+      const pubServer = new NodeRSA();
+      pubServer.importKey(PUBLIC_KEY, 'public');
+      const verified = pubServer.verify(concat, signature, 'hex', 'hex');
+      console.log("verified = " + verified);
+
+    } else {
+      const sig = new rs.Signature({alg: 'SHA256withDSA'});
+      sig.init(DSA_PRIVATE_KEY.toString())
+      sig.updateString(concat);
+      signature = sig.sign();
+
+      const sig2 = new rs.Signature({alg: 'SHA256withDSA'});
+      sig2.init(DSA_PUBLIC_KEY.toString());
+      sig2.updateString(concat);
+      var isValid = sig2.verify(signature);
+      console.log("Attempting DSA: " + isValid);
+    }
     console.log("signature: " + signature);
 
     const structure = concat + signature;
