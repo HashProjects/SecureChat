@@ -4,7 +4,19 @@ var crypto = require("crypto");
 
 const defaultName = (users: User[]) => {
   let name = "";
-  for (let user of users) {
+  // sort the user's names
+  var sortedUsers: User[] = users.sort((u1,u2) => {
+    if (u1.name > u2.name) {
+      return 1;
+    }
+
+    if (u1.name < u2.name) {
+      return -1;
+    }
+    return 0;
+  });
+
+  for (let user of sortedUsers) {
     name += user.name + ", ";
   }
   return name.slice(0, -2);

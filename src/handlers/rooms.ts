@@ -39,7 +39,7 @@ export const createRoom = async (req: Request, res: Response) => {
   logging.debug(NAMESPACE, "room", room);
 
   res.status(201).json({
-    message: "Succesfully Created Room",
+    message: "Successfully Created Room",
     room: room,
   });
 };

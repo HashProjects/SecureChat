@@ -2,19 +2,47 @@
 // Globals
 // **********
 
-var rooms;
+var rooms = [];
+var users = [];
 
 // **********
 // Helpers
 // **********
 
+const defaultRoomName = (users) => {
+  let name = "";
+  // sort the user's names
+  const sortedUsers = users.sort((u1,u2) => {
+    if (u1 > u2) {
+      return 1;
+    }
+
+    if (u1 < u2) {
+      return -1;
+    }
+    return 0;
+  });
+
+  sortedUsers.forEach( u =>  name += u + ", ");
+  return name.slice(0, -2);
+}
+
 const createUserElement = (user) => {
+  if(users.find(u => u.id === user.id))
+      return;
+
+  users.push(user);
   let item = document.createElement("li");
   item.innerText = user.name;
   item.classList.add("user");
   item.id = user.id;
   $("#userList").append(item);
   $(`#${user.id}`).click((e) => {
+    // determine if the room exists
+    const roomName = defaultRoomName([localStorage.getItem("username"), e.target.innerText])
+    if(rooms.find(r => r.name === roomName))
+      return;
+
     $.ajax({
       type: "POST",
       url: "/api/createRoom",
@@ -40,6 +68,9 @@ const createUserElement = (user) => {
 };
 
 const createChatElement = (room) => {
+  if(rooms.find(u => u.id === rooms.id))
+    return;
+  rooms.push(room);
   let item = document.createElement("li");
   item.innerText = room.name;
   item.classList.add("chatRoom");

@@ -90,7 +90,6 @@ $.ajax({
     const keyPublic = localStorage.getItem("rsaKeyPublic");
     console.log(keyPublic);
 
-    //var encrypt = new JSEncrypt();
     const keyPrivate = new NodeRSA();
     keyPrivate.importKey(key);
 
