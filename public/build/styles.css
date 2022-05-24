@@ -64,6 +64,9 @@ div {
 }
 
 .header {
+  /* background-image: url(banner_registry-lock.webp);
+  background-repeat: no-repeat;
+  background-size: flex; */
   background-color: #333;
   color: #fff;
   overflow: hidden;
@@ -229,7 +232,7 @@ p {
 
 #chat-stuff {
   width: 70vw;
-  overflow-y: scroll;
+  border: 2px rgb(11, 157, 28) solid;
 }
 
 #chat {
@@ -262,7 +265,7 @@ p {
 
 .message {
   padding-top: 2px;
-  padding-left: 15px;
+  padding-left: 10px;
   font-size: 14px;
   line-height: 14px;
   color: rgb(11, 157, 28);
