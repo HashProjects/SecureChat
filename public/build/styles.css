@@ -54,9 +54,8 @@ table {
 
 body,
 html {
-  background-image: url("../assets/prog-code.jpg");
   font-family: Arial, Helvetica, sans-serif;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(32, 38, 39);
   color: #1a2a3a;
 }
 
@@ -100,12 +99,15 @@ div {
 }
 
 .panel {
-  background-image: url("../assets/AndroidPIT-encrypted-secure-security-lock-locked-locks-3-w810h462.jpg");
   border: 30px rgb(0, 0, 0) solid;
   color: #fff;
-  background-color: rgb(0, 187, 239);
+  background-color: rgb(54, 68, 72);
   border-radius: 25px;
   padding: 100px;
+}
+
+.encrypt-selection {
+  vertical-align: middle;
 }
 
 h1 {
@@ -146,11 +148,25 @@ a {
   color: rgb(72, 160, 255);
 }
 
-.button, #logout {
-  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgb(255, 255, 255);
-  background-color: #4CAF50;
-  color: black;
-  border: 2px solid #4CAF50;
+.button, #logout, #submit {
+  display: inline-block;
+  padding: 0.35em 1.2em;
+  border: 0.1em solid #FFFFFF;
+  background-color: #139d1e;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.12em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: #000000;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.button:hover, #logout:hover, #submit:hover {
+  color: #0cd61a;
+  background-color: #FFFFFF;
 }
 
 p {
@@ -169,10 +185,14 @@ p {
 }
 
 #menus {
+  padding-top: 20px;
+  padding-bottom: 20px;
   display: flex;
   align-items: space-evenly;
   justify-content: space-evenly;
   width: 70vw;
+  border-radius: 20px;
+  background-color: #000;
 }
 
 .boxList, #userList, #chatList {
@@ -210,6 +230,11 @@ p {
   gap: 10px;
 }
 
+#chat-stuff {
+  width: 70vw;
+  border: 2px rgb(11, 157, 28) solid;
+}
+
 #chat {
   width: 70vw;
   display: flex;
@@ -235,16 +260,15 @@ p {
   width: 100%;
   height: 60vh;
   background-color: #000;
-  border: 10px rgb(11, 157, 28) solid;
   margin-bottom: 10px;
 }
 
 .message {
+  padding-top: 2px;
+  padding-left: 10px;
+  font-size: 14px;
+  line-height: 14px;
   color: rgb(11, 157, 28);
-}
-
-.message.user {
-  color: blue;
 }
 
 li.online::after {
