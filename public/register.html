@@ -21,7 +21,7 @@
 
       $("#status").text("Generating RSA KeyPair");
       const key = new NodeRSA();
-      key.generateKeyPair(3072, 65537);
+      key.generateKeyPair(2048, 65537);
       var pemPrivate = key.exportKey('pkcs8')
       var pemPublic = key.exportKey('public')
       $("#status").text("");
