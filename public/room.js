@@ -5,8 +5,8 @@
 var room;
 // current set key and iv to a default value
 // TODO: get these values from the server
-var symmetricKey = "e8f61f6bc3f8d36ea8828b62f574f9d767842572d677e34a7d618d5f7ea219ba";
-var initializationVector = "3472cd3b0041c4d9ce2283ff2dd2ed5c"
+var symmetricKey;
+var initializationVector;
 
 // **********
 // Helpers
@@ -30,12 +30,12 @@ const createUserElement = (user) => {
 
 // encrypt with AES-256-CBC
 const encryptMessage = (msg) => {
-  return CryptoJS.AES.encrypt(msg, symmetricKey, {iv : initializationVector}).toString();
+  return CryptoJS.AES.encrypt(msg, symmetricKey, { iv: initializationVector, mode: CryptoJS.mode.CBC }).toString();
 }
 
 // decrypt with AES-256-CBC
 const decryptMessage = (msg) => {
-  return CryptoJS.AES.decrypt(msg, symmetricKey, {iv : initializationVector}).toString(CryptoJS.enc.Utf8);
+  return CryptoJS.AES.decrypt(msg, symmetricKey, {iv : initializationVector, mode: CryptoJS.mode.CBC}).toString(CryptoJS.enc.Utf8);
 }
 
 // **********
@@ -71,6 +71,7 @@ $.ajax({
   dataType: "json",
   success: (data) => {
     const myId = localStorage.getItem("userId");
+    $("#username").text(localStorage.getItem("username"));
     room = data.room;
     room.users.forEach((user) => {
       if (user.id !== myId) {
@@ -90,13 +91,6 @@ $.ajax({
     room_id: room_id,
   }),
   success: (data) => {
-    console.log("got the key")
-    //const myId = localStorage.getItem("userId");
-    symmetricKey = data.key;
-    initializationVector = data.iv;
-    // TODO: remove logging of keys and also data.key and data.iv
-    console.log("symmetricKey = " + symmetricKey);
-    console.log("iv           = " + initializationVector);
     console.log("encryptedKey = " + data.encryptedKey)
 
     const key = localStorage.getItem("rsaKeyPrivate");
@@ -110,9 +104,9 @@ $.ajax({
 
     const pt = keyPrivate.decrypt(data.encryptedKey, 'hex')
     // first 64 characters are the symmetric key
-    symmetricKey = pt.slice(0, 64);
+    symmetricKey = CryptoJS.enc.Hex.parse(pt.slice(0, 64));
     // then  32 characters of IV
-    initializationVector = pt.slice(64, 96);
+    initializationVector = CryptoJS.enc.Hex.parse(pt.slice(64, 96));
 
     // this is what is signed
     const concat = symmetricKey + initializationVector;
@@ -141,6 +135,11 @@ $.ajax({
     console.log("symmetricKey = " + symmetricKey);
     console.log("iv           = " + initializationVector);
     console.log(signatureType + " verified = " + verified);
+    if (verified && symmetricKey.length !== 0 && initializationVector.length !== 0) {
+      $("#roomTitle").text("Secure Chat Room")
+    } else {
+      $("#roomTitle").text("Insecure Chat Room")
+    }
   },
 });
 
@@ -188,8 +187,13 @@ socket.on("message", (username, msg) => {
   console.log("message", username, msg);
   // decrypt the message
   text = decryptMessage(msg)
-  console.log("<- CHAT MESSAGE: text = " + text + " <= cipherText: " + msg + " with key: " + symmetricKey + " and iv:" + initializationVector);
-  createMessageElement(username, text);
+  if (msg.length === 0 || text.length === 0) {
+    console.log("<- CHAT MESSAGE corrupted")
+    createMessageElement(username, "<<INVALID SYMMETRIC KEY>>")
+  } else {
+    console.log("<- CHAT MESSAGE: text = " + text + " <= cipherText: " + msg + " with key: " + symmetricKey + " and iv:" + initializationVector);
+    createMessageElement(username, text);
+  }
 });
 
 /**

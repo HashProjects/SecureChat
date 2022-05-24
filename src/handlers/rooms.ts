@@ -108,11 +108,6 @@ export const key = async (req: Request, res: Response) => {
 
   const key = room[0].key
   const iv = room[0].iv
-  // TODO: remove this logging and key and iv from the response
-  console.log("user found = " + user[0].id)
-  console.log("user key = " + user[0].publicKey)
-  console.log(key);
-  console.log(iv);
 
   const userObject: User = new User(user[0].name, user[0].publicKey, user[0].publicKeyType, user[0].id);
 
@@ -121,8 +116,6 @@ export const key = async (req: Request, res: Response) => {
   // We need to send the key over the sockets
   res.status(201).json({
     message: "Found key",
-    key: key,
-    iv: iv,
     encryptedKey: encryptedKey,
   });
 };
