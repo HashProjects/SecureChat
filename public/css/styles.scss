@@ -237,7 +237,7 @@ p {
 #chat-stuff{
   width: 70vw;
   border: 2px rgb(11, 157, 28) solid;
-  
+  overflow-y: scroll;   // Add this line to fix scrolling chat.
 }
 
 #chat {
