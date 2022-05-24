@@ -23,6 +23,12 @@ Install dependencies
 npm install
 ```
 
+Create Empty Database
+
+```bash
+npm run db
+```
+
 Start the web server
 
 ```bash
@@ -60,6 +66,12 @@ Install dev dependencies
 
 ```bash
 npm install -g sass
+```
+
+Create Empty Database
+
+```bash
+npm run db
 ```
 
 Start the dev web server
