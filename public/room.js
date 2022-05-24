@@ -28,14 +28,32 @@ const createUserElement = (user) => {
   $("#userList").append(item);
 };
 
+function padLeadingZeros(num, size) {
+  var s = num.toString(16);
+  while (s.length < size) s = "0" + s;
+  return s;
+}
+
 // encrypt with AES-256-CBC
 const encryptMessage = (msg) => {
-  return CryptoJS.AES.encrypt(msg, symmetricKey, { iv: initializationVector, mode: CryptoJS.mode.CBC }).toString();
+  const len = padLeadingZeros(msg.length, 8);
+  const hash = CryptoJS.SHA256(msg).toString(CryptoJS.enc.Hex);
+  const msgStructure = len + msg + hash;
+  return CryptoJS.AES.encrypt(msgStructure, symmetricKey, { iv: initializationVector, mode: CryptoJS.mode.CBC }).toString();
 }
 
 // decrypt with AES-256-CBC
-const decryptMessage = (msg) => {
-  return CryptoJS.AES.decrypt(msg, symmetricKey, {iv : initializationVector, mode: CryptoJS.mode.CBC}).toString(CryptoJS.enc.Utf8);
+const decryptMessage = (cipherText) => {
+  const msgStructure = CryptoJS.AES.decrypt(cipherText, symmetricKey, {iv : initializationVector, mode: CryptoJS.mode.CBC}).toString(CryptoJS.enc.Utf8);
+  const len = parseInt(msgStructure.slice(0, 8),16);
+  const msg = msgStructure.slice(8, len + 8);
+  const expectedHash = msgStructure.slice(8 + len);
+  const actualHash = CryptoJS.SHA256(msg).toString(CryptoJS.enc.Hex);
+  if (expectedHash === actualHash) {
+    return msg;
+  } else {
+    return "";
+  }
 }
 
 // **********
