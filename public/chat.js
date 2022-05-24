@@ -114,6 +114,7 @@ $.ajax({
   type: "GET",
   url: `/api/user/${localStorage.getItem("userId")}`,
   success: (data) => {
+    $("#logout").text("Logout " + localStorage.getItem("username"));
     data.rooms.forEach((room) => {
       //console.log(room.name);
       createChatElement(room);

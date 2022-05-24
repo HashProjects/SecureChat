@@ -71,7 +71,7 @@ $.ajax({
   dataType: "json",
   success: (data) => {
     const myId = localStorage.getItem("userId");
-    $("#username").text(localStorage.getItem("username"));
+    $("#logout").text("Logout " + localStorage.getItem("username"));
     room = data.room;
     room.users.forEach((user) => {
       if (user.id !== myId) {
