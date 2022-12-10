@@ -10,7 +10,11 @@
   <script src="https://cdn.socket.io/3.1.3/socket.io.js" crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <!-- import CryptoJS for Symmetric Key Encryption -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
   <script src="/room.js" defer></script>
+  <script src="/nodersa.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
   <link rel="stylesheet" type="text/css" href="/build/styles.css" media="screen" />
 </head>
 
@@ -18,10 +22,12 @@
   <a id="logout" href="/login" onclick="logout()"> Logout </a>
   <div class="content">
     <div class="center">
-      <div class="header">Chat Room</div>
+      <div class="login" id="roomTitle">Chat Room</div>
       <div id="room">
         <div id="chat">
-          <ul id="messageList"></ul>
+          <div id="chat-stuff">
+            <ul id="messageList"></ul>
+          </div>
           <div id="chatInput">
             <textarea type="text" id="chatBox"></textarea>
             <a id="chatButton" class="button">Send</a>

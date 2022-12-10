@@ -10,7 +10,7 @@ export const user = async (req: Request, res: Response) => {
   const user_id = req.params.id;
   if (!user_id) return res.status(400).json({ message: "Invalid Room id" });
 
-  const user = new User("", user_id);
+  const user = new User("", "", "", user_id);
 
   const users = await query("SELECT name FROM Users WHERE id = ?", [user.id]).catch((e) => {
     logging.error(NAMESPACE, "Database Error", e);

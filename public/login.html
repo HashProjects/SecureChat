@@ -9,22 +9,40 @@
   <link rel="stylesheet" type="text/css" href="build/styles.css" media="screen" />
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="/nodersa.js" defer></script>
 </head>
 
 <script>
   $(document).ready(() => {
     $("#form").on('submit', (e) => {
       e.preventDefault();
+      const radios = document.getElementsByName("signatureType");
+      const signatureType = Array.from(radios).find(radio => radio.checked).value;
+
+      $("#status").text("Generating RSA KeyPair");
+      const key = new NodeRSA();
+      key.generateKeyPair(2048, 65537);
+      var pemPrivate = key.exportKey('pkcs8')
+      var pemPublic = key.exportKey('public')
+      $("#status").text("");
+
       $.ajax({
         method: "POST",
         url: "/api/login",
         data: {
           username: $("#username").val(),
           password: $("#password").val(),
+          publicKey: pemPublic,
+          publicKeyType: signatureType,
         },
         success: (data) => {
           localStorage.setItem("username", data.user.name)
           localStorage.setItem("userId", data.user.id)
+          localStorage.setItem("serverPublicKey", data.serverPublicKey)
+          localStorage.setItem("rsaKeyPublic", pemPublic)
+          localStorage.setItem("rsaKeyPrivate", pemPrivate)
+          localStorage.setItem("signatureType", signatureType)
+
           window.location = "/chat";
         },
         error: (e) => {
@@ -46,11 +64,22 @@
           <input name="username" type="text" id="username"><br>
           <label for="password"> Password </label>
           <input name="password" type="password" id="password"><br>
+          <h3>Select a signature scheme:</h3>
+          <div class="encrypt-selection">
+            <input type="radio" name="signatureType" id="RSA" checked value="rsa">
+            <label for="RSA">RSA</label>
+            <input type="radio" name="signatureType" id="DSA" value="dsa">
+            <label for="DSA">DSA</label>
+          </div>
           <input type="submit" class="button" id="submit">
         </form>
+        <div style="padding-top:20px;">
+          <a href="/register" style="padding: 10px; color: white;">Click here to register</a>
+        </div>
+        <p id="error"></p>
+        <p id="status"></p>
       </div>
-      <a href="/register" style="color:white">Click here to register</a>
-      <p id="error"></p>
+      </div>
     </div>
   </div>
 </body>

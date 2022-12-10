@@ -14,7 +14,7 @@ export const createRoom = async (req: Request, res: Response) => {
   const users: User[] = req.body.users;
   const room = new ChatRoom(users, req.body.name);
 
-  await query("INSERT INTO ChatRoom (id, name, key) VALUES (?, ?, ?)", [room.id, room.name, room.key]).catch((e) => {
+  await query("INSERT INTO ChatRoom (id, name, key, iv) VALUES (?, ?, ?, ?)", [room.id, room.name, room.key, room.iv]).catch((e) => {
     logging.error(NAMESPACE, "Database Error", e);
     res.status(500).json({
       message: "Database Error",
@@ -39,7 +39,7 @@ export const createRoom = async (req: Request, res: Response) => {
   logging.debug(NAMESPACE, "room", room);
 
   res.status(201).json({
-    message: "Succesfully Created Room",
+    message: "Successfully Created Room",
     room: room,
   });
 };
@@ -67,5 +67,55 @@ export const room = async (req: Request, res: Response) => {
   res.status(201).json({
     message: "Found room",
     room: room,
+  });
+};
+
+export const key = async (req: Request, res: Response) => {
+  if (!req.body) return res.status(400).json({ message: "missing request body" });
+  const room_id = req.body.room_id;
+  const user_id = req.body.user_id;
+  console.log("room_id = " + room_id);
+  if (!room_id) return res.status(400).json({ message: "Invalid Room id" });
+  if (!user_id) return res.status(400).json({ message: "Invalid User id" });
+
+  const room = await query(
+    "SELECT id, name, key, iv FROM ChatRoom WHERE id = ?",
+    [room_id]
+  ).catch((e) => {
+    logging.error(NAMESPACE, "Database Error", e);
+    res.status(500).json({
+      message: "Database Error",
+      error: e,
+    });
+  });
+
+  const user = await query(
+    "SELECT id, name, publicKey, publicKeyType FROM Users WHERE id = ?",
+    [user_id]
+  ).catch((e) => {
+    logging.error(NAMESPACE, "Database Error", e);
+    res.status(500).json({
+      message: "Database Error",
+      error: e,
+    });
+  });
+
+  if (res.headersSent) return;
+
+  if (!room) return res.status(400).json({ message: "Room not found" });
+
+  if (!user) return res.status(400).json({ message: "User not found" });
+
+  const key = room[0].key
+  const iv = room[0].iv
+
+  const userObject: User = new User(user[0].name, user[0].publicKey, user[0].publicKeyType, user[0].id);
+
+  const encryptedKey = userObject.encryptSymmetricKey(key, iv);
+
+  // We need to send the key over the sockets
+  res.status(201).json({
+    message: "Found key",
+    encryptedKey: encryptedKey,
   });
 };

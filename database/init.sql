@@ -6,6 +6,8 @@ CREATE TABLE Users (
     name VARCHAR UNIQUE,
     password VARCHAR,
     version INT DEFAULT 0,
+    publicKey VARCHAR,
+    publicKeyType VARCHAR,
     PRIMARY KEY (id)
 );
 
@@ -24,6 +26,7 @@ CREATE TABLE ChatRoom (
     id CHAR(36),
     name VARCHAR,
     key VARCHAR,
+    iv VARCHAR,
     PRIMARY KEY(id)
 );
 

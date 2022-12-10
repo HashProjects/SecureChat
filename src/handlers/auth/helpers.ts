@@ -17,9 +17,12 @@ const JWT_OPTIONS = {
 };
 
 /* Read JWT keys from files */
-const PRIVATE_KEY = readFileSync(config.auth.jwt.private);
-const PUBLIC_KEY = readFileSync(config.auth.jwt.public);
+export const PRIVATE_KEY = readFileSync(config.auth.jwt.private);
+export const PUBLIC_KEY = readFileSync(config.auth.jwt.public);
 
+/* Read DSA keys from files */
+export const DSA_PRIVATE_KEY = readFileSync(config.dsa.private);
+export const DSA_PUBLIC_KEY = readFileSync(config.dsa.public);
 /**
  * Warning if Default JWT Key is being used
  */
@@ -44,7 +47,8 @@ export const auth = async (token: string | null): Promise<User | null> => {
 
   if (version === false || data.version !== version) return null;
 
-  const user = new User(data.username, data.id);
+  // TODO: will this cause a problem?
+  const user = new User(data.username, "", "", data.id);
   return user;
 };
 

@@ -51,6 +51,13 @@ And a public key:
 Update the `.env` to use the new file names.
 In this example the private key was jwt.RS256.key and the public key was jwt.RS256.key.pub
 
+### DSA keys
+
+DSA key generation involves two steps:
+
+    openssl dsaparam -out dsaparam.pem 3072
+    openssl gendsa -out dsaprivkey.pem dsaparam.pem
+    openssl dsa -in dsaprivkey.pem -pubout -out dsapubkey.pem
 ---
 
 # Development
@@ -103,8 +110,25 @@ When the user attempts to login, their password is hashed and compared against t
 JWTs contain a digital signature that guarantees integrity.
 
 ## Message Sending
+Encrypt messages before sending with this structure:
+  - Symmetric Key
+  - IV
+  - SHA256(Symmetric Key || IV)
 
-## Key Passing
+Symmetric Key Encryption
+    - 256-bit keys
+    - CBC Mode
+    - use Crypto-JS 4.1.1 library for AES - https://www.npmjs.com/package/crypto-js
+
+
+## Key Distribution
+- Server encrypts the symmetric key in this structure with the users public RSA key:
+  - Symmetric Key
+  - IV
+  - Digital Signature of (Symmetic Key || IV) using either RSA or DSA
+
+ Uses the node-rsa library, https://www.npmjs.com/package/node-rsa - `npm install node-rsa` and https://www.npmjs.com/package/jsrsasign
+`npm install jsrsasign jsrsasign-util` for DSA.
 
 # Documentation
 
@@ -170,19 +194,6 @@ JWTs contain a digital signature that guarantees integrity.
 
 ---
 
-### `message`
-
-```
-{
-  conversation: string,
-  isImage: bool,
-  msg: string,
-  checksum: string
-}
-```
-
----
-
 # TODO
 
 ## Front-end
@@ -191,12 +202,8 @@ Better design
   -  /chat and /chat/{room} could be fleshed out more
 
 Store symmetrical key for chats in local storage
-Encrypt messages before sending
 
-- Pressing ENTER in the chat message box should send the message
-- When a message is sent, the chat message box should be cleared
 - When entering a room, ask the user to confirm
-- When a user is logs in, ask the user which digital signature scheme will be used: RSA or DSA
 
 ## Back-end
 
@@ -204,28 +211,13 @@ Encrypt messages before sending
 
 - Endpoint for fetching previous chat messages (maybe just add to room get)
 
-- On ChatRoom Creation:
-    - Generate symmetrical key
-    - Store in DB
-- Make sure the key is returned from /room
-
 - Add DELETE endpoint for deleting a chatroom
 
-- Add public key to user module (RSA or DSA based on user preference)
-
-- create a new endpoint for a user to get the symmetric key for a chatroom (/key)
-
 - consider using JWT that can use either RSA or DSA for digital signatures.
-  Does JWT meet the requirement of E(PUa, E(PRs, SymmetricKey)) that supplies the symmetric
-  key with confidentiality and digital signature of the Server?
-    - jsonwebtoken - https://github.com/auth0/node-jsonwebtoken
+  - Does JWT meet the requirement of E(PUa, E(PRs, SymmetricKey)) that supplies the symmetric
+    key with confidentiality and digital signature of the Server? Only digital signature
+      - jsonwebtoken - https://github.com/auth0/node-jsonwebtoken
 
 - How does the user know the Public Key of the Server?
-
-- Add an RSA keypair and a DSA keypair to the Server?
-
-- Symmetric Key Encryption
-    - 256-bit keys
-    - CBC Mode
-    - send IV with the Key
-    - use Crypto-JS 4.1.1 library for AES - https://www.npmjs.com/package/crypto-js
+  - currently, the server sends the public key after register/login
+  - Should we have a handshake instead?
